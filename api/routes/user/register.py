@@ -3,7 +3,8 @@
 from fastapi import APIRouter, Body, HTTPException, Response
 from pydantic import EmailStr
 
-from db.models import User, UserAuth, UserOut
+from db.models import User
+from schemas.user.users import UserAuth, UserOut
 from core.jwt import access_security, user_from_token
 from utils.mail import send_password_reset_email
 from utils.password import hash_password

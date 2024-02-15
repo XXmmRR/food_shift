@@ -4,8 +4,9 @@ from fastapi import APIRouter, HTTPException, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 
 from schemas.user.auth import AccessToken, RefreshToken
-from db.models import User, UserAuth
+from db.models import User
 from core.jwt import access_security, refresh_security
+from schemas.user.users import UserAuth
 from utils.password import hash_password
 
 

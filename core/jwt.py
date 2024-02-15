@@ -2,20 +2,20 @@
 from fastapi_jwt import JwtAuthorizationCredentials, JwtAccessBearer, JwtRefreshBearer
 from datetime import timedelta
 from db.models import User
-from core.config import SECRET_KEY
+from core.config import CONFIG
 
 
 ACCESS_EXPIRES = timedelta(minutes=15)
 REFRESH_EXPIRES = timedelta(days=30)
 
 access_security = JwtAccessBearer(
-    SECRET_KEY,
+    CONFIG.authjwt_secret_key,
     access_expires_delta=ACCESS_EXPIRES,
     refresh_expires_delta=REFRESH_EXPIRES,
 )
 
 refresh_security = JwtRefreshBearer(
-    SECRET_KEY,
+    CONFIG.authjwt_secret_key,
     access_expires_delta=ACCESS_EXPIRES,
     refresh_expires_delta=REFRESH_EXPIRES,
 )
