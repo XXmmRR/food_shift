@@ -1,6 +1,6 @@
 from beanie import Document, Indexed, init_beanie, Link
 from typing import List
-
+from pydantic import EmailStr
 
 class Address(Document):
     lat: float
@@ -13,6 +13,7 @@ class User(Document):
     first_name: str
     last_name: str
     phone: str
+    email: EmailStr
     password: str
     user_type: str
     favorites: List[Link['Institution']]

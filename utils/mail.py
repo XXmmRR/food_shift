@@ -2,7 +2,7 @@
 
 from fastapi_mail import FastMail, ConnectionConfig, MessageSchema, MessageType
 
-from myserver.config import CONFIG
+from core.config import CONFIG
 
 mail_conf = ConnectionConfig(
     MAIL_USERNAME=CONFIG.mail_username,
