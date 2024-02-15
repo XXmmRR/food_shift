@@ -18,7 +18,7 @@ async def request_verification_email(
     email: EmailStr = Body(..., embed=True)
 ) -> Response:
     """Send the user a verification email."""
-    user = await User.by_email(email)
+    user = await User.find_one(User.email == user_auth.email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:

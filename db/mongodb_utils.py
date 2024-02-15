@@ -5,7 +5,7 @@ from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
 from .mongodb import db
 from beanie import init_beanie
-from db.models import Address, Institution, User, Food, Tag, Rating
+from db .models import Address, Institution, User, Food, Tag, Rating
 from core.config import CONFIG
 
 

@@ -1,5 +1,6 @@
 from beanie import Document, Indexed, init_beanie, Link
-from typing import List
+from typing import List, Optional
+from datetime import datetime
 from pydantic import EmailStr
 
 class Address(Document):
@@ -15,9 +16,10 @@ class User(Document):
     phone: str
     email: EmailStr
     password: str
-    user_type: str
-    favorites: List[Link['Institution']]
-    address: List[Link[Address]]
+    user_type: str = 'client'
+    email_confirmed_at: Optional[datetime] = None 
+    favorites: Optional[List[Link['Institution']]] = None
+    address: Optional[List[Link[Address]]] = None
 
 
 

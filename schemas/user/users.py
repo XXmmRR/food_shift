@@ -9,10 +9,11 @@ from pydantic import BaseModel, EmailStr
 
 class UserAuth(BaseModel):
     """User register and login auth."""
-
+    first_name: str
+    last_name: str
+    phone: str    
     email: EmailStr
     password: str
-
 
 class UserUpdate(BaseModel):
     """Updatable user fields."""
