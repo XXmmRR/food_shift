@@ -39,7 +39,7 @@ async def forgot_password(email: EmailStr = embed) -> Response:
         raise HTTPException(400, "Email is already verified")
     if user.disabled:
         raise HTTPException(400, "Your account is disabled")
-    token = access_security.create_access_token(user.jwt_subject)
+    token = access_security.create_access_token({'username': user.email})
     await send_password_reset_email(email, token)
     return Response(status_code=200)
 

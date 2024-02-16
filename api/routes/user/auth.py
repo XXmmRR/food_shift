@@ -21,8 +21,8 @@ async def login(user_auth: UserAuth) -> RefreshToken:
         raise HTTPException(status_code=401, detail="Bad email or password")
     if user.email_confirmed_at is None:
         raise HTTPException(status_code=400, detail="Email is not yet verified")
-    access_token = access_security.create_access_token(user.jwt_subject)
-    refresh_token = refresh_security.create_refresh_token(user.jwt_subject)
+    access_token = access_security.create_access_token({'username': user.email})
+    refresh_token = refresh_security.create_refresh_token({'username': user.email})
     return RefreshToken(access_token=access_token, refresh_token=refresh_token)
 
 
