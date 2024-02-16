@@ -6,6 +6,7 @@ from api.routes.user.mail import router as MailRouter
 from api.routes.user.register import router as RegisterRouter
 from api.routes.user.user import router as UserRouter
 from api.routes.institutions.institution import router as InstitutionRouter
+from api.routes.institutions.tags import router as TagRouter
 
 def get_application() -> FastAPI:
 
@@ -26,6 +27,7 @@ def get_application() -> FastAPI:
     application.include_router(RegisterRouter)
     application.include_router(UserRouter)
     application.include_router(InstitutionRouter)
+    application.include_router(TagRouter)
     return application
 
 
