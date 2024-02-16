@@ -40,7 +40,7 @@ class Institution(Document):
     image: Optional[str] = None
     description: str
     owner: Link[User] 
-    tags: List[Link[Tag]] = None
+    tags: Optional[List[Link[Tag]]] = None
     
 
 class Food(Document):

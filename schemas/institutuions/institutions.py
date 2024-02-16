@@ -13,3 +13,8 @@ class InstitutionOut(BaseModel):
     name: str
     image: Optional[str] = None
     description: str        
+    
+    
+class InstitutionDelete(BaseModel):
+    name: str
+    
