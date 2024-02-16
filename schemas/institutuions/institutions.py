@@ -8,3 +8,9 @@ class InstitutionCreate(BaseModel):
     description: str
     user: UserMail
 
+
+class InstitutionOut(BaseModel):
+    name: str
+    image: str
+    description: str
+        

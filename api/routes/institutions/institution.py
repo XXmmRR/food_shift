@@ -3,14 +3,14 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from db.models import Institution, User
 from schemas.user.users import UserAuth
-from schemas.institutuions.institutions import InstitutionCreate
+from schemas.institutuions.institutions import InstitutionCreate, InstitutionOut
 from typing import Optional, Annotated
 
 
 router = APIRouter(prefix="/institutions", tags=["Institutions"])
 
 
-@router.post('')
+@router.post('', response_model=InstitutionOut)
 async def institution_create(
                             institution_create: InstitutionCreate,
     ):
