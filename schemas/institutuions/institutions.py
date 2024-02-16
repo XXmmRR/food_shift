@@ -3,6 +3,7 @@ from schemas.user.users import UserMail
 from fastapi import UploadFile, File
 from typing import Optional
 
+
 class InstitutionCreate(BaseModel):
     name: str
     description: str
@@ -12,9 +13,8 @@ class InstitutionCreate(BaseModel):
 class InstitutionOut(BaseModel):
     name: str
     image: Optional[str] = None
-    description: str        
-    
-    
+    description: str
+
+
 class InstitutionDelete(BaseModel):
     name: str
-    

@@ -7,7 +7,6 @@ class Settings(BaseModel):
 
     root_url: str = config("ROOT_URL", default="http://localhost:8080")
 
-
     # Security settings
     authjwt_secret_key: str = config("SECRET_KEY")
     salt: bytes = config("SALT").encode()
@@ -20,12 +19,11 @@ class Settings(BaseModel):
     mail_sender: str = config("MAIL_SENDER", default="")
 
     testing: bool = config("TESTING", default=False, cast=bool)
-    
-    # Mongo settings
-    MONGODB_URL: str = config('MONGODB_URL')
-    MIN_CONNECTIONS_COUNT: int = config('MIN_CONNECTIONS_COUNT')
-    MAX_CONNECTIONS_COUNT: int = config('MAX_CONNECTIONS_COUNT')
 
+    # Mongo settings
+    MONGODB_URL: str = config("MONGODB_URL")
+    MIN_CONNECTIONS_COUNT: int = config("MIN_CONNECTIONS_COUNT")
+    MAX_CONNECTIONS_COUNT: int = config("MAX_CONNECTIONS_COUNT")
 
 
 CONFIG = Settings()

@@ -3,6 +3,7 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import EmailStr
 
+
 class Address(Document):
     lat: float
     lon: float
@@ -16,12 +17,11 @@ class User(Document):
     phone: str
     email: EmailStr
     password: str
-    user_type: str = 'client'
+    user_type: str = "client"
     disabled: Optional[bool] = None
-    email_confirmed_at: Optional[datetime] = None 
-    favorites: Optional[List[Link['Institution']]] = None
+    email_confirmed_at: Optional[datetime] = None
+    favorites: Optional[List[Link["Institution"]]] = None
     address: Optional[List[Link[Address]]] = None
-
 
 
 class Tag(Document):
@@ -32,16 +32,16 @@ class Tag(Document):
 class Rating(Document):
     starts: float
     user: Link[User]
-    institution: Link['Institution']    
+    institution: Link["Institution"]
 
 
 class Institution(Document):
     name: str
     image: Optional[str] = None
     description: str
-    owner: Link[User] 
+    owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
-    
+
 
 class Food(Document):
     name: str
@@ -50,4 +50,3 @@ class Food(Document):
     price: int
     draft: bool
     institution: Link[Institution]
-    

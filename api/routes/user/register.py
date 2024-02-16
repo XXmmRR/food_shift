@@ -13,6 +13,7 @@ router = APIRouter(prefix="/register", tags=["Register"])
 
 embed = Body(..., embed=True)
 
+
 @router.post("", response_model=UserOut)
 async def user_registration(user_auth: UserRegister):
     """Create a new user."""
@@ -20,11 +21,13 @@ async def user_registration(user_auth: UserRegister):
     if user is not None:
         raise HTTPException(409, "User with that email already exists")
     hashed = hash_password(user_auth.password)
-    user = User(first_name=user_auth.first_name, 
-                last_name=user_auth.last_name ,
-                phone=user_auth.phone,
-                email=user_auth.email, 
-                password=hashed)
+    user = User(
+        first_name=user_auth.first_name,
+        last_name=user_auth.last_name,
+        phone=user_auth.phone,
+        email=user_auth.email,
+        password=hashed,
+    )
     await user.create()
     return user
 
@@ -39,7 +42,7 @@ async def forgot_password(email: EmailStr = embed) -> Response:
         raise HTTPException(400, "Email is already verified")
     if user.disabled:
         raise HTTPException(400, "Your account is disabled")
-    token = access_security.create_access_token({'username': user.email})
+    token = access_security.create_access_token({"username": user.email})
     await send_password_reset_email(email, token)
     return Response(status_code=200)
 

@@ -9,14 +9,17 @@ from pydantic import BaseModel, EmailStr
 
 class UserRegister(BaseModel):
     """User register."""
+
     first_name: str
     last_name: str
-    phone: str    
+    phone: str
     email: EmailStr
     password: str
 
+
 class UserAuth(BaseModel):
-    """User login """
+    """User login"""
+
     email: EmailStr
     password: str
 
@@ -40,4 +43,5 @@ class UserOut(UserUpdate):
 
 class UserMail(BaseModel):
     """User email for links"""
+
     email: Annotated[str, Indexed(EmailStr, unique=True)]

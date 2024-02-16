@@ -25,7 +25,7 @@ async def request_verification_email(
         raise HTTPException(400, "Email is already verified")
     if user.disabled:
         raise HTTPException(400, "Your account is disabled")
-    token = access_security.create_access_token({'username': user.email})
+    token = access_security.create_access_token({"username": user.email})
     await send_verification_email(email, token)
     return Response(status_code=200)
 

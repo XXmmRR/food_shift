@@ -19,4 +19,3 @@ class RefreshToken(AccessToken):
 
     refresh_token: str
     refresh_token_expires: timedelta = REFRESH_EXPIRES
-    

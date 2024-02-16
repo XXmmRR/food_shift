@@ -8,6 +8,7 @@ from api.routes.user.user import router as UserRouter
 from api.routes.institutions.institution import router as InstitutionRouter
 from api.routes.institutions.tags import router as TagRouter
 
+
 def get_application() -> FastAPI:
 
     application = FastAPI()
@@ -19,7 +20,7 @@ def get_application() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    
+
     application.add_event_handler("startup", connect_to_mongo)
     application.add_event_handler("shutdown", close_mongo_connection)
     application.include_router(AuthRouter)

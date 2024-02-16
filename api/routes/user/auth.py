@@ -21,14 +21,14 @@ async def login(user_auth: UserAuth) -> RefreshToken:
         raise HTTPException(status_code=401, detail="Bad email or password")
     if user.email_confirmed_at is None:
         raise HTTPException(status_code=400, detail="Email is not yet verified")
-    access_token = access_security.create_access_token({'username': user.email})
-    refresh_token = refresh_security.create_refresh_token({'username': user.email})
+    access_token = access_security.create_access_token({"username": user.email})
+    refresh_token = refresh_security.create_refresh_token({"username": user.email})
     return RefreshToken(access_token=access_token, refresh_token=refresh_token)
 
 
 @router.post("/refresh")
 async def refresh(
-    auth: JwtAuthorizationCredentials = Security(refresh_security)
+    auth: JwtAuthorizationCredentials = Security(refresh_security),
 ) -> AccessToken:
     """Return a new access token from a refresh token."""
     access_token = access_security.create_access_token(subject=auth.subject)
