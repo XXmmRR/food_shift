@@ -11,6 +11,5 @@ class InstitutionCreate(BaseModel):
 
 class InstitutionOut(BaseModel):
     name: str
-    image: str
-    description: str
-        
+    image: Optional[str] = None
+    description: str        
