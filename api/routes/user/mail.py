@@ -18,14 +18,14 @@ async def request_verification_email(
     email: EmailStr = Body(..., embed=True)
 ) -> Response:
     """Send the user a verification email."""
-    user = await User.find_one(User.email == user_auth.email)
+    user = await User.find_one(User.email == email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:
         raise HTTPException(400, "Email is already verified")
     if user.disabled:
         raise HTTPException(400, "Your account is disabled")
-    token = access_security.create_access_token(user.jwt_subject)
+    token = access_security.create_access_token({'username': user.email})
     await send_verification_email(email, token)
     return Response(status_code=200)
 

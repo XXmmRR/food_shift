@@ -11,7 +11,7 @@ mail_conf = ConnectionConfig(
     MAIL_PORT=CONFIG.mail_port,
     MAIL_SERVER=CONFIG.mail_server,
     MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=True,
+    MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
 )
 

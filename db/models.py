@@ -17,6 +17,7 @@ class User(Document):
     email: EmailStr
     password: str
     user_type: str = 'client'
+    disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None 
     favorites: Optional[List[Link['Institution']]] = None
     address: Optional[List[Link[Address]]] = None
