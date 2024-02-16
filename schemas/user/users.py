@@ -7,13 +7,19 @@ from beanie import Document, Indexed
 from pydantic import BaseModel, EmailStr
 
 
-class UserAuth(BaseModel):
-    """User register and login auth."""
+class UserRegister(BaseModel):
+    """User register."""
     first_name: str
     last_name: str
     phone: str    
     email: EmailStr
     password: str
+
+class UserAuth(BaseModel):
+    """User login """
+    email: EmailStr
+    password: str
+
 
 class UserUpdate(BaseModel):
     """Updatable user fields."""
@@ -30,4 +36,8 @@ class UserOut(UserUpdate):
 
     email: Annotated[str, Indexed(EmailStr, unique=True)]
     disabled: bool = False
-    
+
+
+class UserMail(BaseModel):
+    """User email for links"""
+    email: Annotated[str, Indexed(EmailStr, unique=True)]

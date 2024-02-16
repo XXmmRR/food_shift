@@ -36,11 +36,11 @@ class Rating(Document):
 
 
 class Institution(Document):
-    name: Indexed(str)
-    image: str
+    name: str
+    image: Optional[str] = None
     description: str
-    owner: Link[User]
-    tags: List[Link[Tag]]
+    owner: Link[User] 
+    tags: List[Link[Tag]] = None
     
 
 class Food(Document):

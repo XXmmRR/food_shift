@@ -4,7 +4,7 @@ from fastapi import APIRouter, Body, HTTPException, Response
 from pydantic import EmailStr
 
 from db.models import User
-from schemas.user.users import UserAuth, UserOut
+from schemas.user.users import UserOut, UserRegister
 from core.jwt import access_security, user_from_token
 from utils.mail import send_password_reset_email
 from utils.password import hash_password
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/register", tags=["Register"])
 embed = Body(..., embed=True)
 
 @router.post("", response_model=UserOut)
-async def user_registration(user_auth: UserAuth):
+async def user_registration(user_auth: UserRegister):
     """Create a new user."""
     user = await User.find_one(User.email == user_auth.email)
     if user is not None:

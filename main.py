@@ -5,6 +5,7 @@ from api.routes.user.auth import router as AuthRouter
 from api.routes.user.mail import router as MailRouter
 from api.routes.user.register import router as RegisterRouter
 from api.routes.user.user import router as UserRouter
+from api.routes.institutions.institution import router as InstitutionRouter
 
 def get_application() -> FastAPI:
 
@@ -24,6 +25,7 @@ def get_application() -> FastAPI:
     application.include_router(MailRouter)
     application.include_router(RegisterRouter)
     application.include_router(UserRouter)
+    application.include_router(InstitutionRouter)
     return application
 
 
