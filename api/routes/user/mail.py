@@ -34,7 +34,7 @@ async def request_verification_email(
 async def verify_email(token: str) -> Response:
     """Verify the user's email with the supplied token."""
     user = await user_from_token(token)
-    if user is None:
+    if user is None:    
         raise HTTPException(404, "No user found with that email")
     if user.email_confirmed_at is not None:
         raise HTTPException(400, "Email is already verified")

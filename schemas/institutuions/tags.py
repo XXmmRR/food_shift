@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class Tag(BaseModel):
-    TagName: str
+    tag_name: str
     draft: bool
 
 

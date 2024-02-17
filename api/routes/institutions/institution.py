@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from db.models import Institution, User
 from schemas.user.users import UserAuth
+from db.models import Tag as TagDoc
 from schemas.institutuions.institutions import (
     InstitutionCreate,
     InstitutionOut,
@@ -21,9 +22,13 @@ async def institution_create(
     user = await User.find_one(User.email == institution_create.user.email)
     if user is None:
         raise HTTPException(404, "No user found with that email")
+    for i in institution_create.tags:
+        if i not in await TagDoc.find_all().to_list():
+            institution_create.tags.remove(i)
     institution = Institution(
         name=institution_create.name,
         description=institution_create.description,
+        tags=institution_create.tags,
         owner=user,
     )
     await institution.insert()
