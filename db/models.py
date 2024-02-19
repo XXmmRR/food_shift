@@ -2,7 +2,7 @@ from beanie import Document, Indexed, init_beanie, Link
 from typing import List, Optional
 from datetime import datetime
 from pydantic import EmailStr
-
+from beanie import Indexed
 
 class Address(Document):
     lat: float
@@ -36,7 +36,7 @@ class Rating(Document):
 
 
 class Institution(Document):
-    name: str
+    InstitutionName: Indexed(str, unique=True)
     image: Optional[str] = None
     description: str
     owner: Link[User]

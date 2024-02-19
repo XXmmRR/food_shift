@@ -3,13 +3,17 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from db.models import Institution, User
 from schemas.user.users import UserAuth
+from fastapi import APIRouter, HTTPException, status
 from db.models import Tag as TagDoc
+from typing import List
+from pymongo.errors import DuplicateKeyError
 from schemas.institutuions.institutions import (
     InstitutionCreate,
     InstitutionOut,
-    InstitutionDelete,
+    InstitutionUpdate
 )
-from typing import Optional, Annotated
+from utils.pydantic_encoder import encode_input
+
 
 
 router = APIRouter(prefix="/institutions", tags=["Institutions"])
@@ -25,25 +29,43 @@ async def institution_create(
     for i in institution_create.tags:
         if i not in await TagDoc.find_all().to_list():
             institution_create.tags.remove(i)
-    institution = Institution(
-        name=institution_create.name,
-        description=institution_create.description,
-        tags=institution_create.tags,
-        owner=user,
-    )
-    await institution.insert()
+    try:
+        institution = Institution(
+            InstitutionName=institution_create.InstitutionName,
+            description=institution_create.description,
+            tags=institution_create.tags,
+            owner=user,
+        )
+        await institution.insert()
+    except DuplicateKeyError:
+        return HTTPException(status_code=406, detail='Name alredy exist')
     return institution
 
 
-@router.get("")
+@router.get("", response_model=List[InstitutionOut])
 async def institution_get():
-    return await Institution.find_all().to_list()
+    inst =  await Institution.find_all().to_list()
+    return inst
 
 
-@router.delete("")
-async def institution_delete(institution_delete: InstitutionDelete):
+@router.patch('/{name}')
+async def institution_update(name: str, institution_update: InstitutionUpdate):
+    institution = await Institution.find_one(Institution.InstitutionName==name)
+    if not institution:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Book with id {id} not found"
+        )
+    institution_data = encode_input(institution_update)
+    _ = await institution.update({"$set": institution_data})
+    updated_institution = await Institution.find_one(Institution.InstitutionName==name)
+    return updated_institution
+
+
+
+@router.delete("/{name}")
+async def institution_delete(name):
     institution = await Institution.find_one(
-        Institution.name == institution_delete.name
+        Institution.name == name
     )
     if institution is None:
         raise HTTPException(404, "No institution found with this name")

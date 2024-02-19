@@ -6,17 +6,21 @@ from schemas.institutuions.tags import Tag
 
 
 class InstitutionCreate(BaseModel):
-    name: str
+    InstitutionName: str
     description: str
     user: UserMail
     tags: Optional[List[Tag]] = None
 
 
 class InstitutionOut(BaseModel):
-    name: str
+    InstitutionName: str
     image: Optional[str] = None
+    description: Optional[str] = None
     tags: Optional[List[Tag]] = None
 
 
-class InstitutionDelete(BaseModel):
-    name: str
+class InstitutionUpdate(BaseModel):
+    InstitutionName: Optional[str] = None
+    image: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[List[Tag]] = None
