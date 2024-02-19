@@ -13,6 +13,7 @@ from schemas.institutuions.institutions import (
     InstitutionUpdate
 )
 from utils.pydantic_encoder import encode_input
+import aiofiles
 
 
 
@@ -38,8 +39,23 @@ async def institution_create(
         )
         await institution.insert()
     except DuplicateKeyError:
-        return HTTPException(status_code=406, detail='Name alredy exist')
+        raise HTTPException(status_code=409, detail='Name alredy exist')
     return institution
+
+
+@router.patch("/{name}/set-image")
+async def set_image_for_institution(name: str, file: UploadFile):
+    institution = await Institution.find_one(Institution.InstitutionName==name)
+    if institution:
+        institution.update({"$set": {Institution.image: file.filename}})
+    else:
+        return HTTPException(status_code=404, detail='Object not found')
+    async with aiofiles.open(file.filename, 'wb') as out_file:
+        content = await file.read()  # async read
+        await out_file.write(content)  # async write
+
+    new_institution = await Institution.find_one(Institution.InstitutionName==name)
+    return new_institution
 
 
 @router.get("", response_model=List[InstitutionOut])
@@ -48,7 +64,7 @@ async def institution_get():
     return inst
 
 
-@router.patch('/{name}')
+@router.patch('/{name}', response_model=InstitutionOut)
 async def institution_update(name: str, institution_update: InstitutionUpdate):
     institution = await Institution.find_one(Institution.InstitutionName==name)
     if not institution:
