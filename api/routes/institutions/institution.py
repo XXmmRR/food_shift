@@ -47,7 +47,7 @@ async def institution_create(
 async def set_image_for_institution(name: str, file: UploadFile):
     institution = await Institution.find_one(Institution.InstitutionName==name)
     if institution:
-        institution.update({"$set": {Institution.image: file.filename}})
+        await institution.update({"$set": {Institution.image: file.filename}})
     else:
         return HTTPException(status_code=404, detail='Object not found')
     async with aiofiles.open(file.filename, 'wb') as out_file:
