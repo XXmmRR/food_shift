@@ -4,11 +4,6 @@ from datetime import datetime
 from pydantic import EmailStr
 from beanie import Indexed
 
-class Address(Document):
-    lat: float
-    lon: float
-    name: str
-    orient: str
 
 
 class User(Document):
@@ -21,7 +16,13 @@ class User(Document):
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
-    address: Optional[List[Link[Address]]] = None
+
+class Address(Document):
+    lat: float
+    lon: float
+    name: str
+    orient: str
+    user: Link[User]
 
 
 class Tag(Document):
