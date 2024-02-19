@@ -2,8 +2,8 @@ from beanie import Document, Indexed, init_beanie, Link
 from typing import List, Optional
 from datetime import datetime
 from pydantic import EmailStr
-from beanie import Indexed
-
+from beanie import Indexed, BackLink
+from pydantic import Field
 
 
 class User(Document):
@@ -15,7 +15,9 @@ class User(Document):
     user_type: str = "client"
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
+    addresses: Optional[List[BackLink['Address']]] = Field(original_field="user")
     favorites: Optional[List[Link["Institution"]]] = None
+
 
 class Address(Document):
     lat: float

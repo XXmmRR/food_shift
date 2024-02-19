@@ -9,7 +9,7 @@ from db.models import User, Address
 from core.jwt import access_security, refresh_security, user_from_credentials, user_from_token
 from schemas.user.users import UserAuth
 from utils.password import hash_password
-from schemas.user.address import AddressCreate
+from schemas.user.address import AddressCreate, AddressOut
 from typing import List
 
 router = APIRouter(prefix="/address", tags=["Address"])
@@ -21,21 +21,20 @@ async def create_address(
                         auth: JwtAuthorizationCredentials = Security(access_security),
                          ):
     user = await user_from_credentials(auth)
-    address =  Address(lat=Address.lat,
-                            lon=Address.lon,
-                            name=Address.name,
-                            orient=Address.orient,
-                            user=user
+    address =  Address(lat=address.lat,
+                        lon=address.lon,
+                        name=address.name,
+                        orient=address.orient,
+                        user=user
                             )
     await address.insert()
     return address
 
 
-@router.get('', response_model=List[AddressCreate])
+@router.get('', response_model=List[AddressOut])
 async def get_address(auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
-    addresses = await Address.find_all(Address.user==user)
-    if not addresses:
-        return HTTPException(status_code=404, detail="User don't have address")
-    return addresses
+    if not user.addresses:
+        raise HTTPException(status_code=404, detail="User don't have address")
+    return user.addresses
     
