@@ -8,6 +8,7 @@ from api.routes.user.user import router as UserRouter
 from api.routes.institutions.institution import router as InstitutionRouter
 from api.routes.user.address import router as AddressRouter
 from api.routes.institutions.tags import router as TagRouter
+from api.routes.user.favorites import router as FavoriteRouter
 
 
 def get_application() -> FastAPI:
@@ -31,6 +32,7 @@ def get_application() -> FastAPI:
     application.include_router(InstitutionRouter)
     application.include_router(TagRouter)
     application.include_router(AddressRouter)
+    application.include_router(FavoriteRouter)
     return application
 
 
