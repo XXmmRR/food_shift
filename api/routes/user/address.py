@@ -12,6 +12,7 @@ from utils.password import hash_password
 from schemas.user.address import AddressCreate, AddressOut
 from typing import List
 
+
 router = APIRouter(prefix="/address", tags=["Address"])
 
 
@@ -35,4 +36,4 @@ async def create_address(
 async def get_address(auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
     address = await Address.find_many(Address.user.id == user.id).to_list()
-    return address
+    return [AddressOut(lat=x.lat, lon=x.lon, orient=x.orient, name=x.name, id=str(x.id)) for x in address]

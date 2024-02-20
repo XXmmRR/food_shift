@@ -12,4 +12,4 @@ class AddressCreate(BaseModel):
     orient: str
     
 class AddressOut(AddressCreate):
-    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+    id: str
