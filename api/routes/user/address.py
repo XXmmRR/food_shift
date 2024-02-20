@@ -34,7 +34,5 @@ async def create_address(
 @router.get('', response_model=List[AddressOut])
 async def get_address(auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
-    if not user.addresses:
-        raise HTTPException(status_code=404, detail="User don't have address")
-    return user.addresses
-    
+    address = await Address.find_many(Address.user.id == user.id).to_list()
+    return address

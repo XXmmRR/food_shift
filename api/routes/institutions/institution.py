@@ -81,9 +81,9 @@ async def institution_update(name: str, institution_update: InstitutionUpdate):
 @router.delete("/{name}")
 async def institution_delete(name):
     institution = await Institution.find_one(
-        Institution.name == name
+        Institution.InstitutionName == name
     )
     if institution is None:
         raise HTTPException(404, "No institution found with this name")
     await institution.delete()
-    return {"message": f"Institution with name {institution.name} has been deleted "}
+    return {"message": f"Institution with name {institution.InstitutionName} has been deleted "}

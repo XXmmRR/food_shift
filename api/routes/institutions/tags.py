@@ -10,7 +10,7 @@ router = APIRouter(prefix="/tags", tags=["Tags"])
 
 @router.post("", response_model=Tag)
 async def create_tag(tag_create: Tag):
-    tag = TagDoc(tag_name=tag_create.TagName, draft=tag_create.draft)
+    tag = TagDoc(tag_name=tag_create.tag_name, draft=tag_create.draft)
     await TagDoc.create(tag)
     return tag
 
@@ -22,6 +22,6 @@ async def tag_list():
 
 @router.delete("")
 async def delete_tag(tag_delete: TagDelete):
-    tag = await TagDoc.find_one(TagDoc.tag_name == tag_delete.TagName)
+    tag = await TagDoc.find_one(TagDoc.tag_name == tag_delete.tag_name)
     await tag.delete()
     return {"message": f"tag with name {tag.tag_name} has deleted"}

@@ -15,7 +15,6 @@ class User(Document):
     user_type: str = "client"
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
-    addresses: Optional[List[BackLink['Address']]] = Field(original_field="user")
     favorites: Optional[List[Link["Institution"]]] = None
 
 

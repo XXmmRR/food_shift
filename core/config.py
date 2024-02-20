@@ -11,7 +11,7 @@ class Settings(BaseModel):
     authjwt_secret_key: str = config("SECRET_KEY")
     salt: bytes = config("SALT").encode()
     # FastMail SMTP server settings
-    mail_console: bool = config("MAIL_CONSOLE", default=False, cast=bool)
+    mail_console: bool = config("MAIL_CONSOLE", default=True, cast=bool)
     mail_server: str = config("MAIL_SERVER", default="smtp.gmail.com")
     mail_port: int = config("MAIL_PORT", default=587, cast=int)
     mail_username: str = config("MAIL_USERNAME", default="")

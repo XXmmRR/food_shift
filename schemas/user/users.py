@@ -5,7 +5,7 @@ from typing import Annotated, Any, Optional
 
 from beanie import Document, Indexed
 from pydantic import BaseModel, EmailStr
-
+from typing import Optional
 
 class UserRegister(BaseModel):
     """User register."""
@@ -38,7 +38,7 @@ class UserOut(UserUpdate):
     """User fields returned to the client."""
 
     email: Annotated[str, Indexed(EmailStr, unique=True)]
-    disabled: bool = False
+    disabled: Optional[bool] = None
 
 
 class UserMail(BaseModel):
