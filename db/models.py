@@ -44,11 +44,17 @@ class Institution(Document):
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
 
+class Category(Document):
+    name: str
+    institution: Link[Institution] 
+
 
 class Food(Document):
     name: str
     description: str
-    image: Optional[str] = None
+    image: str
     price: int
-    active: bool
+    draft: bool
+    category: Link[Category]
     institution: Link[Institution]
+
