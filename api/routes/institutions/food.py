@@ -15,7 +15,7 @@ from schemas.institutuions.food import (
 from db.models import Food, Institution
 from utils.pydantic_encoder import encode_input
 import aiofiles
-
+from utils.pydantic_encoder import encode_input
 
 
 router = APIRouter(prefix="/food", tags=["Food"])
@@ -27,6 +27,8 @@ async def create_food(
                     food_data: FoodeCreate,
                     ):
     institution = await Institution.find_one(Institution.InstitutionName==institution_name)
+    if not institution:
+        return HTTPException('404', detail='institution does not exist')
     food = Food(name=food_data.name, description=food_data.description, price=food_data.price, active=food_data.active, institution=institution)
     await Food.create(food)
     return food
@@ -35,6 +37,36 @@ async def create_food(
 @router.get('/{institution_name}', response_model=List[FoodOut])
 async def get_food_by_institution(institution_name: str):
     institution = await Institution.find_one(Institution.InstitutionName==institution_name)
+    if not institution:
+        return HTTPException('404', detail='institution does not exist')
     food_list = await Food.find_many(Food.institution.id==institution.id).to_list()
+    if not food_list:
+        return HTTPException('404', detail='food not added')
     return food_list
 
+
+@router.patch('/update/{food_id}')
+async def update_food(food_update: FoodUpdate,
+                      food_id: str
+                      ):
+    food = await Food.find_one(Food.id==food_id)
+    if not food:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Food with id {food} not found"
+        )
+
+    food_data = encode_input(food_update)
+    _ = await food.update({"$set": food_data})
+    updated_food = await Food.find_one(Food.id==food_id)
+    return updated_food
+
+
+@router.delete('/delete/{food_id}')
+async def delete_food(food_id: str):
+    food = await Food.find_one(Food.id==food_id)
+    if not food:
+        return HTTPException(status_code='404', detail=f'food with id {food_id} not exist')
+    await food.delete()
+    return {"message": f"food with id {food.id} has deleted"}
+
+    

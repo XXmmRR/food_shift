@@ -83,7 +83,7 @@ async def institution_delete(name):
     institution = await Institution.find_one(
         Institution.InstitutionName == name
     )
-    if institution is None:
+    if not institution:
         raise HTTPException(404, "No institution found with this name")
     await institution.delete()
     return {"message": f"Institution with name {institution.InstitutionName} has been deleted "}
