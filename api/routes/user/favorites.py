@@ -43,9 +43,12 @@ async def delete_favorites(
                            auth: JwtAuthorizationCredentials = Security(access_security)
                             ):
     user = await user_from_credentials(auth)
-    inst = await User.find_all(user.fa.InstitutionName == favorite_institution, fetch_link=True)
-    print(inst)
-    return {'message': f'institution with id {inst.id} has been removed from favorites'}
-    
+    await user.fetch_all_links()
+    inst = await Institution.find_one(Institution.InstitutionName == favorite_institution)
+    for i in user.favorites:
+        if i.InstitutionName == inst.InstitutionName:
+            user.favorites.remove(i)            
+            return {'message': f'institution with id {inst.id} has been removed from favorites'}
+    return HTTPException(status_code=404, detail=f'favorite institution with {inst.InstitutionName} does not exits')
 
     
