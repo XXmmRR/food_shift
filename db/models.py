@@ -44,9 +44,10 @@ class Institution(Document):
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
 
+
 class Category(Document):
     name: str
-    institution: Link[Institution] 
+    institution: Link[Institution]
 
 
 class Food(Document):
@@ -57,4 +58,3 @@ class Food(Document):
     draft: bool
     category: Link[Category]
     institution: Link[Institution]
-
