@@ -48,7 +48,7 @@ class Institution(Document):
 class Food(Document):
     name: str
     description: str
-    image: str
+    image: Optional[str] = None
     price: int
     active: bool
     institution: Link[Institution]
