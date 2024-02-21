@@ -5,11 +5,13 @@ from pydantic import BaseModel, Field, BeforeValidator
 
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
+
 class AddressCreate(BaseModel):
     name: str
     lat: float
     lon: float
     orient: str
-    
+
+
 class AddressOut(AddressCreate):
     id: str

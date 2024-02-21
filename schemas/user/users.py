@@ -7,6 +7,7 @@ from beanie import Document, Indexed
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+
 class UserRegister(BaseModel):
     """User register."""
 

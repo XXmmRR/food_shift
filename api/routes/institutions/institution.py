@@ -10,11 +10,10 @@ from pymongo.errors import DuplicateKeyError
 from schemas.institutuions.institutions import (
     InstitutionCreate,
     InstitutionOut,
-    InstitutionUpdate
+    InstitutionUpdate,
 )
 from utils.pydantic_encoder import encode_input
 import aiofiles
-
 
 
 router = APIRouter(prefix="/institutions", tags=["Institutions"])
@@ -39,51 +38,52 @@ async def institution_create(
         )
         await institution.insert()
     except DuplicateKeyError:
-        raise HTTPException(status_code=409, detail='Name alredy exist')
+        raise HTTPException(status_code=409, detail="Name alredy exist")
     return institution
 
 
 @router.patch("/{name}/set-image")
 async def set_image_for_institution(name: str, file: UploadFile):
-    institution = await Institution.find_one(Institution.InstitutionName==name)
+    institution = await Institution.find_one(Institution.InstitutionName == name)
     if institution:
         await institution.update({"$set": {Institution.image: file.filename}})
     else:
-        return HTTPException(status_code=404, detail='Object not found')
-    async with aiofiles.open(file.filename, 'wb') as out_file:
+        return HTTPException(status_code=404, detail="Object not found")
+    async with aiofiles.open(file.filename, "wb") as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
 
-    new_institution = await Institution.find_one(Institution.InstitutionName==name)
+    new_institution = await Institution.find_one(Institution.InstitutionName == name)
     return new_institution
 
 
 @router.get("", response_model=List[InstitutionOut])
 async def institution_get():
-    inst =  await Institution.find_all().to_list()
+    inst = await Institution.find_all().to_list()
     return inst
 
 
-@router.patch('/{name}', response_model=InstitutionOut)
+@router.patch("/{name}", response_model=InstitutionOut)
 async def institution_update(name: str, institution_update: InstitutionUpdate):
-    institution = await Institution.find_one(Institution.InstitutionName==name)
+    institution = await Institution.find_one(Institution.InstitutionName == name)
     if not institution:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Book with id {id} not found"
         )
     institution_data = encode_input(institution_update)
     _ = await institution.update({"$set": institution_data})
-    updated_institution = await Institution.find_one(Institution.InstitutionName==name)
+    updated_institution = await Institution.find_one(
+        Institution.InstitutionName == name
+    )
     return updated_institution
-
 
 
 @router.delete("/{name}")
 async def institution_delete(name):
-    institution = await Institution.find_one(
-        Institution.InstitutionName == name
-    )
+    institution = await Institution.find_one(Institution.InstitutionName == name)
     if not institution:
         raise HTTPException(404, "No institution found with this name")
     await institution.delete()
-    return {"message": f"Institution with name {institution.InstitutionName} has been deleted "}
+    return {
+        "message": f"Institution with name {institution.InstitutionName} has been deleted "
+    }
