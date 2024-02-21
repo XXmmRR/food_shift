@@ -3,7 +3,7 @@ from typing import Optional
 
 class FoodModel(BaseModel):
     name: str
-    decription: str
+    description: str
     price: int
 
 
@@ -12,7 +12,7 @@ class FoodeCreate(FoodModel):
     
     
 class FoodOut(FoodModel):
-    image: Optional[str] = None
+    image: Optional[str|None] = None
     
     
 class FoodUpdate(FoodeCreate):

@@ -27,8 +27,14 @@ async def create_food(
                     food_data: FoodeCreate,
                     ):
     institution = await Institution.find_one(Institution.InstitutionName==institution_name)
-    food = Food(name=food_data.name, description=food_data.decription, price=food_data.price, active=food_data.active, institution=institution)
-    await food.insert()
+    food = Food(name=food_data.name, description=food_data.description, price=food_data.price, active=food_data.active, institution=institution)
+    await Food.create(food)
     return food
 
+
+@router.get('/{institution_name}', response_model=List[FoodOut])
+async def get_food_by_institution(institution_name: str):
+    institution = await Institution.find_one(Institution.InstitutionName==institution_name)
+    food_list = await Food.find_many(Food.institution.id==institution.id).to_list()
+    return food_list
 
