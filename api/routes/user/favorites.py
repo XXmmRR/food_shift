@@ -51,4 +51,4 @@ async def delete_favorites(
             return {'message': f'institution with id {inst.id} has been removed from favorites'}
     return HTTPException(status_code=404, detail=f'favorite institution with {inst.InstitutionName} does not exits')
 
-    
+

@@ -50,5 +50,5 @@ class Food(Document):
     description: str
     image: str
     price: int
-    draft: bool
+    active: bool
     institution: Link[Institution]
