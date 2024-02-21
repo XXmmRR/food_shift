@@ -5,6 +5,13 @@ from pydantic import EmailStr
 from beanie import Indexed, BackLink
 from pydantic import Field
 
+class Address(Document):
+    lat: float
+    lon: float
+    name: str
+    orient: str
+    user: Link['User']
+
 
 class User(Document):
     first_name: str
@@ -16,14 +23,9 @@ class User(Document):
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
+    addresses = Optional[List[BackLink[Address]]]
 
 
-class Address(Document):
-    lat: float
-    lon: float
-    name: str
-    orient: str
-    user: Link[User]
 
 
 class Tag(Document):
@@ -32,7 +34,7 @@ class Tag(Document):
 
 
 class Rating(Document):
-    starts: float
+    stars: float
     user: Link[User]
     institution: Link["Institution"]
 
@@ -43,6 +45,8 @@ class Institution(Document):
     description: str
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
+    ratings: Optional[List[BackLink[Rating]]] 
+    foods: Optional[List[BackLink['Food']]] 
 
 
 class Category(Document):
