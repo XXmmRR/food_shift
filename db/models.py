@@ -4,6 +4,8 @@ from datetime import datetime
 from pydantic import EmailStr
 from beanie import Indexed, BackLink
 from pydantic import Field
+from typing import Union
+
 
 class Address(Document):
     lat: float
@@ -23,7 +25,7 @@ class User(Document):
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
-    addresses = Optional[List[BackLink[Address]]]
+    # addresses = Optional[List[BackLink[Address]]] = Field(original_field='user')
 
 
 
@@ -45,9 +47,8 @@ class Institution(Document):
     description: str
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
-    ratings: Optional[List[BackLink[Rating]]] 
-    foods: Optional[List[BackLink['Food']]] 
-
+    ratings: Optional[List[BackLink[Rating]]] = Field(original_field='institution')
+    foods: Optional[List[BackLink['Food']]] = Field(original_field='institution')
 
 class Category(Document):
     name: str
@@ -57,8 +58,7 @@ class Category(Document):
 class Food(Document):
     name: str
     description: str
-    image: str
+    image: Optional[str] = None
     price: int
     draft: bool
-    category: Link[Category]
     institution: Link[Institution]

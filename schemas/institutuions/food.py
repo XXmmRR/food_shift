@@ -42,15 +42,14 @@ class FoodModel(BaseModel):
     name: str
     description: str
     price: int
-
+    draft: bool
 
 class FoodeCreate(FoodModel):
     active: bool
 
 
 class FoodOut(FoodModel):
-    id: PyObjectId
-    image: Optional[str | None] = None
+    image: Optional[str] = None
 
 
 class FoodUpdate(FoodeCreate):

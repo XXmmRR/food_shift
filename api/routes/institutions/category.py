@@ -1,4 +1,4 @@
-"""Food router."""
+"""Category router."""
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi import APIRouter, HTTPException, status

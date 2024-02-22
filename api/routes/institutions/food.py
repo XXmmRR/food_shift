@@ -33,6 +33,8 @@ async def create_food(
         price=food_data.price,
         active=food_data.active,
         institution=institution,
+        draft=food_data.draft,
+
     )
     await Food.create(food)
     return food
@@ -41,11 +43,12 @@ async def create_food(
 @router.get("/{institution_name}", response_model=List[FoodOut])
 async def get_food_by_institution(institution_name: str):
     institution = await Institution.find_one(
-        Institution.InstitutionName == institution_name
+        Institution.InstitutionName == institution_name,
+        fetch_links=True
     )
     if not institution:
         return HTTPException("404", detail="institution does not exist")
-    food_list = await Food.find_many(Food.institution.id == institution.id).to_list()
+    food_list = institution.foods
     if not food_list:
         return HTTPException("404", detail="food not added")
     return food_list
