@@ -40,12 +40,18 @@ async def create_address(
 @router.get("", response_model=List[AddressOut])
 async def get_address(auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
+    if not user.addresses:
+        raise HTTPException(status_code=404, detail="user don't have address")
     return user.addresses
 
 
 @router.delete("/{id}")
-async def delete_address(auth: JwtAuthorizationCredentials = Security(access_security)):
+async def delete_address(id: str,
+                        auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
-    address = await Address.find_one(Address.id == id, Address.user.id == user.id)
+    address = await Address.find_one(Address.id==id)
+    if not address:
+        raise HTTPException(status_code=404, detail='address not found')
     await address.delete()
-    return {"message": f"address with {str(address.id)} has been deleted"}
+    return {"message": f"address has been deleted"}
+
