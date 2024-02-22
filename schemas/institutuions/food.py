@@ -49,6 +49,7 @@ class FoodeCreate(FoodModel):
 
 
 class FoodOut(FoodModel):
+    id: PyObjectId
     image: Optional[str] = None
 
 
