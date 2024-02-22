@@ -40,11 +40,7 @@ async def create_address(
 @router.get("", response_model=List[AddressOut])
 async def get_address(auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
-    address = await Address.find_many(Address.user.id == user.id).to_list()
-    return [
-        AddressOut(lat=x.lat, lon=x.lon, orient=x.orient, name=x.name, id=str(x.id))
-        for x in address
-    ]
+    return user.addresses
 
 
 @router.delete("/{id}")

@@ -25,7 +25,7 @@ class User(Document):
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
-    # addresses = Optional[List[BackLink[Address]]] = Field(original_field='user')
+    addresses: Optional[List[BackLink[Address]]] = Field(original_field='user')
 
 
 
