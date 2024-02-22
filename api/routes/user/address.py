@@ -14,6 +14,7 @@ from core.jwt import (
 from schemas.user.users import UserAuth
 from utils.password import hash_password
 from schemas.user.address import AddressCreate, AddressOut
+from schemas.institutuions.food import PyObjectId
 from typing import List
 
 
@@ -46,10 +47,10 @@ async def get_address(auth: JwtAuthorizationCredentials = Security(access_securi
 
 
 @router.delete("/{id}")
-async def delete_address(id: str,
+async def delete_address(id: PyObjectId,
                         auth: JwtAuthorizationCredentials = Security(access_security)):
     user = await user_from_credentials(auth)
-    address = await Address.find_one(Address.id==id)
+    address = await Address.get(id)
     if not address:
         raise HTTPException(status_code=404, detail='address not found')
     await address.delete()
