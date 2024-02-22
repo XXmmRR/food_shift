@@ -11,6 +11,8 @@ from api.routes.institutions.tags import router as TagRouter
 from api.routes.user.favorites import router as FavoriteRouter
 from api.routes.institutions.food import router as FoodRouter
 from api.routes.institutions.category import router as CategoryRouter
+from api.routes.institutions.rating import router as RatingRouter
+
 
 def get_application() -> FastAPI:
 
@@ -36,6 +38,7 @@ def get_application() -> FastAPI:
     application.include_router(FavoriteRouter)
     application.include_router(FoodRouter)
     application.include_router(CategoryRouter)
+    application.include_router(RatingRouter)
     return application
 
 

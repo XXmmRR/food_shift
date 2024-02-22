@@ -27,7 +27,7 @@ class User(Document):
     favorites: Optional[List[Link["Institution"]]] = None
     addresses: Optional[List[BackLink[Address]]] = Field(original_field='user')
 
-
+    
 
 
 class Tag(Document):
