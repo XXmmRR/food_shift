@@ -11,6 +11,7 @@ from core.config import CONFIG
 
 async def connect_to_mongo():
     logging.info("mongo has started")
+    print(CONFIG.MONGODB_URL)
     db.client = AsyncIOMotorClient(
         str(CONFIG.MONGODB_URL),
         maxPoolSize=CONFIG.MAX_CONNECTIONS_COUNT,
