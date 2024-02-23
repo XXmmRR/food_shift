@@ -12,6 +12,7 @@ from api.routes.user.favorites import router as FavoriteRouter
 from api.routes.institutions.food import router as FoodRouter
 from api.routes.institutions.category import router as CategoryRouter
 from api.routes.institutions.rating import router as RatingRouter
+from api.routes.chats.chat import router as ChatRouter
 
 
 def get_application() -> FastAPI:
@@ -39,6 +40,7 @@ def get_application() -> FastAPI:
     application.include_router(FoodRouter)
     application.include_router(CategoryRouter)
     application.include_router(RatingRouter)
+    application.include_router(ChatRouter)
     return application
 
 
