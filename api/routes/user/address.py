@@ -47,12 +47,12 @@ async def get_address(auth: JwtAuthorizationCredentials = Security(access_securi
 
 
 @router.delete("/{id}")
-async def delete_address(id: PyObjectId,
-                        auth: JwtAuthorizationCredentials = Security(access_security)):
+async def delete_address(
+    id: PyObjectId, auth: JwtAuthorizationCredentials = Security(access_security)
+):
     user = await user_from_credentials(auth)
     address = await Address.get(id)
     if not address:
-        raise HTTPException(status_code=404, detail='address not found')
+        raise HTTPException(status_code=404, detail="address not found")
     await address.delete()
     return {"message": f"address has been deleted"}
-

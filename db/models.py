@@ -12,7 +12,7 @@ class Address(Document):
     lon: float
     name: str
     orient: str
-    user: Link['User']
+    user: Link["User"]
 
 
 class User(Document):
@@ -25,9 +25,7 @@ class User(Document):
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
-    addresses: Optional[List[BackLink[Address]]] = Field(original_field='user')
-
-    
+    addresses: Optional[List[BackLink[Address]]] = Field(original_field="user")
 
 
 class Tag(Document):
@@ -47,8 +45,9 @@ class Institution(Document):
     description: str
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
-    ratings: Optional[List[BackLink[Rating]]] = Field(original_field='institution')
-    foods: Optional[List[BackLink['Food']]] = Field(original_field='institution')
+    ratings: Optional[List[BackLink[Rating]]] = Field(original_field="institution")
+    foods: Optional[List[BackLink["Food"]]] = Field(original_field="institution")
+
 
 class Category(Document):
     name: str

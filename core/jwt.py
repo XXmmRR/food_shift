@@ -28,4 +28,6 @@ async def user_from_credentials(auth: JwtAuthorizationCredentials) -> User | Non
 async def user_from_token(token: str) -> User | None:
     """Return the user associated with a token value."""
     payload = access_security._decode(token)
-    return await User.find_one(User.email == payload["subject"]["username"], fetch_links=True)
+    return await User.find_one(
+        User.email == payload["subject"]["username"], fetch_links=True
+    )

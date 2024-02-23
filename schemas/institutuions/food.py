@@ -44,6 +44,7 @@ class FoodModel(BaseModel):
     price: int
     draft: bool
 
+
 class FoodeCreate(FoodModel):
     active: bool
 
