@@ -7,7 +7,7 @@ from utils.websocker_manager import ConnectionManager
 from fastapi import WebSocket, WebSocketDisconnect
 
 
-router = APIRouter(prefix="chat", tags=["Chat"])
+router = APIRouter(prefix="/chat", tags=["Chat"])
 manager = ConnectionManager()
 
 
