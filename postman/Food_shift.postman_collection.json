@@ -1,0 +1,1595 @@
+{
+	"info": {
+		"_postman_id": "e6115b8f-54bc-40e3-a939-5b40dfaba816",
+		"name": "Food_shift",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33089613"
+	},
+	"item": [
+		{
+			"name": "Tags and institution",
+			"item": [
+				{
+					"name": "create tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - tag_name and draft\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.tag_name).to.exist;\r",
+									"    pm.expect(responseData.draft).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tag_name is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.tag_name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Tag_name should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Draft is a boolean value\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.draft).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tag_name\": \"MYCUSTOMTAG1\",\r\n  \"draft\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/tags/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"tags",
+								""
+							]
+						},
+						"description": "\nThis endpoint allows you to create a new tag by sending an HTTP POST request to the specified URL. The request should include a JSON payload in the raw request body type with the keys \"tag_name\" and \"draft\".\n\n### Request Body\n- `tag_name` (string): The name of the tag.\n- `draft` (boolean): Indicates whether the tag is a draft or not.\n\n### Response\nUpon successful execution, the endpoint returns a status code of 200 and a JSON object with the keys \"tag_name\" and \"draft\", containing the details of the newly created tag.\n\nExample:\n```json\n{\n    \"tag_name\": \"\",\n    \"draft\": true\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array of objects with tag_name and draft properties\", function () {\r",
+									"    pm.expect(pm.response.json()).to.be.an('array').that.is.not.empty;\r",
+									"    pm.response.json().forEach(function(tag) {\r",
+									"        pm.expect(tag).to.be.an('object').that.has.all.keys('tag_name', 'draft');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/tags/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"tags",
+								""
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of tags. The response will have a status code of 200 and a content type of application/json. The response body will contain an array of objects, each representing a tag. Each tag object will have a \"tag_name\" and a \"draft\" boolean property."
+					},
+					"response": []
+				},
+				{
+					"name": "delete tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required Content-Type header with value application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message field is present in the response\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object').that.has.property('message');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body is an object\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tag_name\": \"MYCUSTOMTAG1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/tags/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"tags",
+								""
+							]
+						},
+						"description": "This endpoint is used to delete a tag by sending an HTTP DELETE request to 127.0.0.1:8000/tags/. The request should include a payload with the tag_name in the raw request body.\n\n### Request Body\n\n- tag_name (string, required): The name of the tag to be deleted.\n    \n\n### Response\n\n- Status: 200\n- Content-Type: application/json\n- message (string): A message indicating the result of the deletion operation."
+					},
+					"response": []
+				},
+				{
+					"name": "create institution",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.include.all.keys('InstitutionName', 'image', 'description', 'tags');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"InstitutionName is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.InstitutionName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"InstitutionName should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Description is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.description).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Description should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tags should be an array\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.tags).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"InstitutionName\": \"MYNAME\",\r\n  \"description\": \"CUSTOM DECRIPTION\",\r\n  \"user\": {\r\n    \"email\": \"user@example.com\"\r\n  },\r\n  \"tags\": [\r\n    {\r\n      \"tag_name\": \"Фаст Фуд\",\r\n      \"draft\": true\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/institutions/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"institutions",
+								""
+							]
+						},
+						"description": "This endpoint allows you to create a new institution.\n\n### Request Body\n\n- `InstitutionName` (string, required): The name of the institution.\n- `description` (string, required): A brief description of the institution.\n- `user.email` (string, required): The email of the user associated with the institution.\n- `tags` (array of objects, required): An array of tags associated with the institution, where each tag object contains:\n    - `tag_name` (string, required): The name of the tag.\n    - `draft` (boolean, required): Indicates if the tag is a draft or not.\n\n### Response\n\nUpon successful execution, the response will include:\n\n- `InstitutionName` (string): The name of the institution.\n- `image` (string): The URL of the institution's image, if available.\n- `description` (string): The description of the institution.\n- `tags` (array): An array of tags associated with the institution.\n    \n\nExample:\n\n``` json\n{\n  \"InstitutionName\": \"\",\n  \"image\": null,\n  \"description\": \"\",\n  \"tags\": []\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "get institutions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    \r",
+									"    responseData.forEach(function(institution) {\r",
+									"        pm.expect(institution.InstitutionName).to.exist;\r",
+									"        pm.expect(institution.image).to.null || pm.expect(institution.image).to.exist;\r",
+									"        pm.expect(institution.description).to.exist;\r",
+									"        pm.expect(institution.tags).to.exist;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tags is an array\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item.tags).to.be.an('array');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/institutions/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"institutions",
+								""
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of institutions. The response returns a status code of 200 and a JSON array containing information about each institution, including the institution name, image, description, and tags."
+					},
+					"response": []
+				},
+				{
+					"name": "delete institution",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response must have the required Content-Type header\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message field is present in the response\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message field is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Institution 'MYNAME' has been successfully deleted\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/institutions/MYNAME/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"institutions",
+								"MYNAME",
+								""
+							]
+						},
+						"description": "\nThis endpoint sends an HTTP DELETE request to 127.0.0.1:8000/institutions/MYNAME/ to delete the institution with the specified name. Upon successful deletion, the server responds with a status code of 200 and an empty JSON object with a \"message\" key.\n"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users and Auth",
+			"item": [
+				{
+					"name": "register existed user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 409\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(409);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.detail).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Detail field is non-empty\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.detail).to.exist.and.to.have.lengthOf.at.least(1, \"Detail field should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body is in a valid JSON format\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/register/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"register",
+								""
+							]
+						},
+						"description": "\nThis endpoint allows you to register a new user. You need to make an HTTP POST request to {{BASE_URL}}/register/ with the following payload in the raw request body:\n\n```json\n{\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"phone\": \"\",\n    \"email\": \"\",\n    \"password\": \"\"\n}\n```\n\nThe request should include the user's first name, last name, phone number, email, and password.\n\n### Response\n- Status: 409\n- Content-Type: application/json\n\nIn case of a conflict, the response will include a JSON object with a \"detail\" key indicating the specific conflict that occurred.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "register new user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - email, first_name, and last_name\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('email');\r",
+									"    pm.expect(responseData).to.have.property('first_name');\r",
+									"    pm.expect(responseData).to.have.property('last_name');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the 'disabled' field is either null or a boolean value\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.disabled).to.satisfy((value) => value === null || typeof value === 'boolean');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Email is in a valid format\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)*(\\.[a-z]{2,})$/);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"phone\": \"string\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/register/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"register",
+								""
+							]
+						},
+						"description": "\nThis endpoint allows users to register by sending a POST request to the specified URL. The request should include the user's first name, last name, phone number, email, and password in the request body.\n\n### Request Body\n- `first_name` (string): The user's first name.\n- `last_name` (string): The user's last name.\n- `phone` (string): The user's phone number.\n- `email` (string): The user's email address.\n- `password` (string): The user's chosen password.\n\n### Response\nUpon successful registration, the server responds with a status code of 200 and a JSON object containing the user's email, first name, last name, and a flag indicating whether the account is disabled.\n\nExample:\n```json\n{\n    \"email\": \"\",\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"disabled\": null\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "login existed user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"var bodyToken = responseJson.access_token;\r",
+									"pm.environment.set(\"bodyToken\", bodyToken)\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData).to.have.property('access_token');\r",
+									"    pm.expect(responseData).to.have.property('access_token_expires');\r",
+									"    pm.expect(responseData).to.have.property('refresh_token');\r",
+									"    pm.expect(responseData).to.have.property('refresh_token_expires');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Access token is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.access_token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Access token should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"user@example.com\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								""
+							]
+						},
+						"description": "\n### Auth Login\n\nThis endpoint is used to authenticate and login a user.\n\n- Method: POST\n- Base URL: {{BASE_URL}}\n- Endpoint: /auth/login/\n\n#### Request Body\n- Type: Raw (application/json)\n  - email (string): The email of the user\n  - password (string): The password of the user\n\n#### Response\n- Status: 200\n- Content-Type: application/json\n- access_token (string): The access token for the authenticated user\n- access_token_expires (string): The expiry date of the access token\n- refresh_token (string): The refresh token for the authenticated user\n- refresh_token_expires (string): The expiry date of the refresh token\n"
+					},
+					"response": []
+				},
+				{
+					"name": "login not existed user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 401\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(401);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required field 'detail'\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.detail).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"  pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Detail field is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.detail).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Detail field should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify the response includes the expected error message\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.detail).to.exist.and.to.be.a('string');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "get address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - name, lat, lon, orient, and id\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item).to.have.property('name');\r",
+									"        pm.expect(item).to.have.property('lat');\r",
+									"        pm.expect(item).to.have.property('lon');\r",
+									"        pm.expect(item).to.have.property('orient');\r",
+									"        pm.expect(item).to.have.property('id');\r",
+									"        pm.environment.set('id_for_delete', item.id);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Name is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Latitude and longitude are within valid range\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('array');\r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.lat).to.be.a('number').within(-90, 90);\r",
+									"    pm.expect(item.lon).to.be.a('number').within(-180, 180);\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"ID is in a valid format\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.id).to.match(/[A-Za-z0-9]+/);\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/address",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address"
+							]
+						},
+						"description": "\nThis endpoint makes an HTTP GET request to retrieve address information. The response returns a status code of 200 and a JSON array containing objects with properties for name, latitude, longitude, orientation, and ID. The values for these properties are currently masked. \n"
+					},
+					"response": []
+				},
+				{
+					"name": "create address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is a JSON object with name, lat, lon, and orient properties\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"    pm.expect(jsonData).to.have.property('name');\r",
+									"    pm.expect(jsonData).to.have.property('lat');\r",
+									"    pm.expect(jsonData).to.have.property('lon');\r",
+									"    pm.expect(jsonData).to.have.property('orient');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"lat\": 4.32,\r\n  \"lon\": 7.54,\r\n  \"orient\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/address",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address"
+							]
+						},
+						"description": "\nThis endpoint allows you to create a new address by sending an HTTP POST request to {{BASE_URL}}/address. The request should include a JSON payload with the fields \"name\", \"lat\", \"lon\", and \"orient\". The \"name\" field represents the name of the address, \"lat\" and \"lon\" represent the latitude and longitude coordinates, and \"orient\" represents the orientation of the address.\n\n### Request Body\n- name (string): The name of the address.\n- lat (number): The latitude coordinate of the address.\n- lon (number): The longitude coordinate of the address.\n- orient (string): The orientation of the address.\n\n### Response\nUpon successful execution, the endpoint returns a 200 status with a JSON response containing the same fields as the request payload: \"name\", \"lat\", \"lon\", and \"orient\".\n\nExample:\n```json\n{\n  \"name\": \"\",\n  \"lat\": 0,\n  \"lon\": 0,\n  \"orient\": \"\"\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "detele address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the address with id_for_delete is deleted from the system\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.message).to.exist.and.to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body does not contain sensitive information\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(responseData).to.not.have.any.keys('password', 'ssn', 'creditCardNumber');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/address/{{id_for_delete}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"{{id_for_delete}}"
+							]
+						},
+						"description": "\nThis endpoint is used to delete a specific address by making an HTTP DELETE request to the specified URL. Replace '{{id_for_delete}}' with the ID of the address to be deleted.\n\n### Response\n- Status: 200\n- Content-Type: application/json\n\nUpon successful deletion, the response will contain a JSON object with a \"message\" key indicating the status of the deletion.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "delete not existing address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/address/not_exist",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"address",
+								"not_exist"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "add favorites",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/favorites?favorite_institution=string",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"favorites"
+							],
+							"query": [
+								{
+									"key": "favorite_institution",
+									"value": "string"
+								}
+							]
+						},
+						"description": "\nThis endpoint allows users to add a favorite institution by making an HTTP POST request to the specified URL. The request should include the query parameter \"favorite_institution\" with a string value. Upon successful execution, the API returns a 200 status and a JSON response containing the details of the added favorite institution, including its name, image, description, and associated tags.\n\nExample:\n```json\n{\n  \"InstitutionName\": \"\",\n  \"image\": null,\n  \"description\": \"\",\n  \"tags\": []\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get favorites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"InstitutionName is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item.InstitutionName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"InstitutionName should not be empty\");\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Tags array is present and contains expected number of elements\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.tags).to.exist.and.to.be.an('array');\r",
+									"    // Add additional checks for expected number of elements in the tags array if needed\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/favorites/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"favorites",
+								""
+							]
+						},
+						"description": "\nThis endpoint retrieves a list of favorite items. A successful request to this endpoint will return a status code of 200 along with a JSON array containing favorite items. Each item in the array includes properties such as InstitutionName, image, description, and tags. The values for these properties may vary for each favorite item.\n"
+					},
+					"response": []
+				},
+				{
+					"name": "delete favorites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required Content-Type header set to application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Message in the response is a non-empty string\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Message should not be empty\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the favorite_institution query parameter is removed from the favorites\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.message).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Ensure that the response body is empty or null if the favorite_institution does not exist\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.empty;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/favorites/?favorite_institution=string",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"favorites",
+								""
+							],
+							"query": [
+								{
+									"key": "favorite_institution",
+									"value": "string"
+								}
+							]
+						},
+						"description": "\nThis endpoint sends an HTTP DELETE request to remove a favorite institution based on the provided query parameter. The query parameter \"favorite_institution\" should be passed with the name of the institution to be removed from favorites.\n\nUpon a successful execution, the endpoint returns a 200 status with a JSON response containing a \"message\" key, which will provide information about the status of the deletion operation.\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Food",
+			"item": [
+				{
+					"name": "get food list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"\r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item).to.have.property('name');\r",
+									"        pm.expect(item).to.have.property('description');\r",
+									"        pm.expect(item).to.have.property('price');\r",
+									"        pm.expect(item).to.have.property('draft');\r",
+									"        pm.expect(item).to.have.property('image');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Price is a non-negative number\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.price).to.be.a('number').and.to.be.at.least(0);\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Draft field must be a boolean value\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.draft).to.be.a('boolean');\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Image field can be null or a valid URL\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('array');\r",
+									"  responseData.forEach(function(item) {\r",
+									"    pm.expect(item.image).to.satisfy(function (value) {\r",
+									"      return value === null || (typeof value === 'string' && value.match(/^http(s)?:\\/\\/.*/));\r",
+									"    }, \"Image should be null or a valid URL\");\r",
+									"  });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/food/string/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"food",
+								"string",
+								""
+							]
+						},
+						"description": "\nThis endpoint makes an HTTP GET request to retrieve food items based on a string parameter. The response will contain a list of food items in JSON format, including their name, description, price, draft status, and an optional image. \n"
+					},
+					"response": []
+				},
+				{
+					"name": "create food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields - name, description, price, draft, and image\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.name).to.exist;\r",
+									"    pm.expect(responseData.description).to.exist;\r",
+									"    pm.expect(responseData.price).to.exist;\r",
+									"    pm.expect(responseData.draft).to.exist;\r",
+									"    pm.expect(responseData.image).to.exist;\r",
+									"    pm.environment.set('food_for_delete', responseData.id);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Price is a non-negative number\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"\r",
+									"  pm.expect(responseData.price).to.be.a('number').and.to.be.at.least(0);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Draft is a boolean value\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.draft).to.be.a('boolean');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Image is either null or a valid URL\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"\r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.image).to.satisfy((value) => {\r",
+									"        return value === null || (typeof value === 'string' && value.match(/^http(s)?:\\/\\//));\r",
+									"    }, \"Image should be null or a valid URL\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"description\": \"string\",\r\n  \"price\": 0,\r\n  \"draft\": true,\r\n  \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/food/string/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"food",
+								"string",
+								""
+							]
+						},
+						"description": "\nThis endpoint allows you to create a new food item by sending an HTTP POST request to {{BASE_URL}}/food/string/. The request should include a JSON payload in the raw request body type with the following parameters:\n- \"name\" (string): The name of the food item.\n- \"description\" (string): A description of the food item.\n- \"price\" (number): The price of the food item.\n- \"draft\" (boolean): Indicates whether the food item is in draft mode.\n- \"active\" (boolean): Indicates whether the food item is active.\n\n### Response\nUpon successful execution, the endpoint returns a JSON response with the following fields:\n- \"name\" (string): The name of the food item.\n- \"description\" (string): A description of the food item.\n- \"price\" (number): The price of the food item.\n- \"draft\" (boolean): Indicates whether the food item is in draft mode.\n- \"image\" (string): The image of the food item, if available.\n\nExample:\n```json\n{\n    \"name\": \"\",\n    \"description\": \"\",\n    \"price\": 0,\n    \"draft\": true,\n    \"image\": null\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "delete food",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response body is null\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"null\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that 'food_for_delete' is deleted successfully\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"deleted successfully\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/food/delete/{{food_for_delete}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"food",
+								"delete",
+								"{{food_for_delete}}"
+							]
+						},
+						"description": "\nThis endpoint is used to delete a specific food item by making an HTTP DELETE request to the specified URL. The `food_for_delete` path parameter should be replaced with the name or identifier of the food item to be deleted.\n\nThe response to the request returns a status code of 200 and the content type is `text/xml`. The response body is null, indicating that the food item has been successfully deleted.\n\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rating",
+			"item": [
+				{
+					"name": "add rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response has the required fields\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.stars).to.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Stars is a non-negative integer\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData).to.be.an('object');\r",
+									"  pm.expect(responseData.stars).to.be.a('number');\r",
+									"  pm.expect(responseData.stars).to.satisfy((value) => value >= 0, \"Stars must be a non-negative integer\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response time is within an acceptable range\", function () {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bodyToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"stars\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/rating/string",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"rating",
+								"string"
+							]
+						},
+						"description": "\nThis endpoint allows you to submit a rating for a specific string. \n\n### Request Body\n- `stars`: The rating given to the string. (integer)\n\n### Response\nUpon successful submission, the endpoint returns the submitted rating in JSON format.\n\nExample:\n```json\n{\n    \"stars\": 0\n}\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "get rating",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Content type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Response is an array with at least one element\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Each element in the array has a 'stars' field\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    responseData.forEach(function(element) {\r",
+									"        pm.expect(element.stars).to.exist;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Stars field value is a non-negative integer\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('array');\r",
+									"    responseData.forEach(function(item) {\r",
+									"        pm.expect(item.stars).to.be.a('number').and.to.be.at.least(0);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/rating/string",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"rating",
+								"string"
+							]
+						},
+						"description": "\nThis endpoint makes an HTTP GET request to retrieve the rating for a specific string. The response will be in JSON format with the \"stars\" key indicating the rating value. \n\nFor example, a successful request to {{BASE_URL}}/rating/string may return a response with a status code of 200 and a JSON body like [{\"stars\":0}].\n"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bodyToken",
+			"value": ""
+		},
+		{
+			"key": "BASE_URL",
+			"value": "http://127.0.0.1:8000"
+		},
+		{
+			"key": "id_for_delete",
+			"value": ""
+		}
+	]
+}
