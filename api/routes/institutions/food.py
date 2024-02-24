@@ -20,7 +20,7 @@ router = APIRouter(prefix="/food", tags=["Food"])
 async def create_food(
     institution_name: str,
     food_data: FoodeCreate,
-    institution: Institution = Depends(current_institution)
+    institution: Institution = Depends(current_institution),
 ):
     food = Food(
         name=food_data.name,
@@ -35,10 +35,9 @@ async def create_food(
 
 
 @router.get("/{institution_name}", response_model=List[FoodOut])
-async def get_food_by_institution(institution_name: str,
-                                  institution: Institution = Depends(current_institution)
-                                  
-                                  ):
+async def get_food_by_institution(
+    institution_name: str, institution: Institution = Depends(current_institution)
+):
     food_list = institution.foods
     if not food_list:
         return HTTPException("404", detail="food not added")

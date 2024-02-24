@@ -45,10 +45,8 @@ async def institution_create(
 
 @router.patch("/{institution_name}/set-image")
 async def set_image_for_institution(
-                                    name: str, 
-                                    file: UploadFile,
-                                    institution: Institution = Depends(current_institution)
-                                    ):
+    name: str, file: UploadFile, institution: Institution = Depends(current_institution)
+):
     await institution.update({"$set": {Institution.image: file.filename}})
     async with aiofiles.open(file.filename, "wb") as out_file:
         content = await file.read()  # async read
@@ -65,9 +63,10 @@ async def institution_get():
 
 
 @router.patch("/{institution_name}", response_model=InstitutionOut)
-async def institution_update(institution_name: str, 
-                             institution_update: InstitutionUpdate,
-                             institution: Institution = Depends(current_institution)
+async def institution_update(
+    institution_name: str,
+    institution_update: InstitutionUpdate,
+    institution: Institution = Depends(current_institution),
 ):
     institution_data = encode_input(institution_update)
     _ = await institution.update({"$set": institution_data})
@@ -78,9 +77,7 @@ async def institution_update(institution_name: str,
 
 
 @router.delete("/{institution_name}")
-async def institution_delete(
-                             institution: Institution = Depends(current_institution)
-                             ):
+async def institution_delete(institution: Institution = Depends(current_institution)):
     await institution.delete()
     return {
         "message": f"Institution with name {institution.InstitutionName} has been deleted "

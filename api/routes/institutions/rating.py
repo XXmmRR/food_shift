@@ -24,7 +24,7 @@ async def create_rating(
     rating_data: RatingSchema,
     auth: JwtAuthorizationCredentials = Security(access_security),
     institution: Institution = Depends(current_institution),
-    user: User = Depends(current_user)
+    user: User = Depends(current_user),
 ):
     rating = Rating(user=user, institution=institution, stars=rating_data.stars)
     await Rating.create(rating)
@@ -32,5 +32,7 @@ async def create_rating(
 
 
 @router.get("/{institution_name}", response_model=List[RatingSchema])
-async def get_ratings(institution: Institution = Depends(current_institution),):
+async def get_ratings(
+    institution: Institution = Depends(current_institution),
+):
     return institution.ratings

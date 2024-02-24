@@ -24,7 +24,7 @@ router = APIRouter(prefix="/address", tags=["Address"])
 async def create_address(
     address: AddressCreate,
     auth: JwtAuthorizationCredentials = Security(access_security),
-    user: User = Depends(current_user)
+    user: User = Depends(current_user),
 ):
     address = Address(
         lat=address.lat,
@@ -38,9 +38,10 @@ async def create_address(
 
 
 @router.get("", response_model=List[AddressOut])
-async def get_address(auth: JwtAuthorizationCredentials = Security(access_security),
-                      user: User = Depends(current_user)
-                      ):
+async def get_address(
+    auth: JwtAuthorizationCredentials = Security(access_security),
+    user: User = Depends(current_user),
+):
     if not user.addresses:
         raise HTTPException(status_code=404, detail="user don't have address")
     return user.addresses
@@ -48,8 +49,9 @@ async def get_address(auth: JwtAuthorizationCredentials = Security(access_securi
 
 @router.delete("/{id}")
 async def delete_address(
-    id: PyObjectId, auth: JwtAuthorizationCredentials = Security(access_security),
-    user: User = Depends(current_user)
+    id: PyObjectId,
+    auth: JwtAuthorizationCredentials = Security(access_security),
+    user: User = Depends(current_user),
 ):
     user = await user_from_credentials(auth)
     address = await Address.get(id)
