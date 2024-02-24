@@ -1,7 +1,7 @@
 """Category router."""
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from typing import List
 from db.models import Category, Institution
 from schemas.institutuions.category import Category as CategorySchema

@@ -2,18 +2,14 @@
 
 from fastapi import APIRouter, Depends, Security
 from db.models import Institution, User
-from schemas.user.users import UserAuth
 from typing import List
 from schemas.institutuions.ratings import RatingSchema
-from db.models import Food, Institution, Rating
-from utils.pydantic_encoder import encode_input
-import aiofiles
+from db.models import Institution, Rating
 from fastapi_jwt import JwtAuthorizationCredentials
 from api.depends.institution.current_institution import current_institution
 from api.depends.user.current_user import current_user
-from schemas.user.auth import AccessToken, RefreshToken
-from db.models import User, Address
-from core.jwt import access_security, user_from_token, user_from_credentials
+from db.models import User
+from core.jwt import access_security
 
 
 router = APIRouter(prefix="/rating", tags=["Rating"])

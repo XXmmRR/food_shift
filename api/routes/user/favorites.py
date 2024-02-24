@@ -3,16 +3,12 @@
 from fastapi import APIRouter, HTTPException, Security
 from fastapi_jwt import JwtAuthorizationCredentials
 
-from schemas.user.auth import AccessToken, RefreshToken
-from db.models import User, Address
+from db.models import User
 from core.jwt import (
     access_security,
-    refresh_security,
     user_from_credentials,
-    user_from_token,
 )
 from fastapi import Depends
-from schemas.user.users import UserAuth
 from db.models import Institution
 from schemas.institutuions.institutions import InstitutionOut
 from typing import List

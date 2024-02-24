@@ -3,14 +3,11 @@
 from fastapi import APIRouter, HTTPException, Security, Depends
 from fastapi_jwt import JwtAuthorizationCredentials
 
-from schemas.user.auth import AccessToken, RefreshToken
 from db.models import User, Address
 from core.jwt import (
     access_security,
     user_from_credentials,
 )
-from schemas.user.users import UserAuth
-from utils.password import hash_password
 from schemas.user.address import AddressCreate, AddressOut
 from schemas.institutuions.food import PyObjectId
 from typing import List

@@ -1,7 +1,5 @@
 import logging
-from beanie import init_beanie, Document
-from pydantic import BaseModel
-from typing import Optional
+from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from .mongodb import db
 from beanie import init_beanie

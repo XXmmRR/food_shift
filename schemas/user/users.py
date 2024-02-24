@@ -1,9 +1,6 @@
 """User models."""
 
-from datetime import datetime
-from typing import Annotated, Any, Optional
-
-from beanie import Document, Indexed
+from typing import Annotated, Optional
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 

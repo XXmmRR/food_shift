@@ -1,9 +1,8 @@
 """Authentication router."""
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, Depends
 from db.models import Institution, User
-from schemas.user.users import UserAuth
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException
 from db.models import Tag as TagDoc
 from typing import List
 from pymongo.errors import DuplicateKeyError

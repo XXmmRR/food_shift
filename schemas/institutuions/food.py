@@ -1,7 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional, Annotated, Union, Any
+from typing import Optional, Any
 from bson import ObjectId
-from pydantic import PlainSerializer, AfterValidator, WithJsonSchema
 
 from bson import ObjectId
 from pydantic_core import core_schema

@@ -1,10 +1,9 @@
-from beanie import Document, Indexed, init_beanie, Link
+from beanie import Document, Indexed, Link
 from typing import List, Optional
 from datetime import datetime
 from pydantic import EmailStr
 from beanie import Indexed, BackLink
 from pydantic import Field
-from typing import Union
 
 
 class Address(Document):
