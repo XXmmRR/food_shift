@@ -11,11 +11,12 @@ from core.jwt import (
     user_from_credentials,
     user_from_token,
 )
+from fastapi import Depends
 from schemas.user.users import UserAuth
 from db.models import Institution
 from schemas.institutuions.institutions import InstitutionOut
 from typing import List
-
+from api.depends.user.current_user import current_user
 
 router = APIRouter(prefix="/favorites", tags=["Favorites"])
 
@@ -24,8 +25,8 @@ router = APIRouter(prefix="/favorites", tags=["Favorites"])
 async def favorite_create(
     favorite_institution: str,
     auth: JwtAuthorizationCredentials = Security(access_security),
+    user: User = Depends(current_user)
 ):
-    user = await user_from_credentials(auth)
     institution = await Institution.find_one(
         Institution.InstitutionName == favorite_institution
     )
@@ -37,7 +38,8 @@ async def favorite_create(
 
 
 @router.get("", response_model=List[InstitutionOut])
-async def get_favorites(auth: JwtAuthorizationCredentials = Security(access_security)):
+async def get_favorites(auth: JwtAuthorizationCredentials = Security(access_security), 
+                        user: User = Depends(current_user)):
     user = await user_from_credentials(auth)
     await user.fetch_all_links()
     return user.favorites
@@ -47,6 +49,7 @@ async def get_favorites(auth: JwtAuthorizationCredentials = Security(access_secu
 async def delete_favorites(
     favorite_institution: str,
     auth: JwtAuthorizationCredentials = Security(access_security),
+    user: User = Depends(current_user)
 ):
     user = await user_from_credentials(auth)
     await user.fetch_all_links()

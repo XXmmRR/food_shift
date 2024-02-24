@@ -1,6 +1,6 @@
 """Authentication router."""
 
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from db.models import Institution, User
 from schemas.user.users import UserAuth
 from fastapi import APIRouter, HTTPException, status
@@ -13,6 +13,7 @@ from schemas.institutuions.institutions import (
     InstitutionUpdate,
 )
 from utils.pydantic_encoder import encode_input
+from api.depends.institution import current_institution
 import aiofiles
 
 
@@ -42,13 +43,13 @@ async def institution_create(
     return institution
 
 
-@router.patch("/{name}/set-image")
-async def set_image_for_institution(name: str, file: UploadFile):
-    institution = await Institution.find_one(Institution.InstitutionName == name)
-    if institution:
-        await institution.update({"$set": {Institution.image: file.filename}})
-    else:
-        return HTTPException(status_code=404, detail="Object not found")
+@router.patch("/{institution_name}/set-image")
+async def set_image_for_institution(
+                                    name: str, 
+                                    file: UploadFile,
+                                    institution: Institution = Depends(current_institution)
+                                    ):
+    await institution.update({"$set": {Institution.image: file.filename}})
     async with aiofiles.open(file.filename, "wb") as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
@@ -63,26 +64,23 @@ async def institution_get():
     return inst
 
 
-@router.patch("/{name}", response_model=InstitutionOut)
-async def institution_update(name: str, institution_update: InstitutionUpdate):
-    institution = await Institution.find_one(Institution.InstitutionName == name)
-    if not institution:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"Book with id {id} not found"
-        )
+@router.patch("/{institution_name}", response_model=InstitutionOut)
+async def institution_update(institution_name: str, 
+                             institution_update: InstitutionUpdate,
+                             institution: Institution = Depends(current_institution)
+):
     institution_data = encode_input(institution_update)
     _ = await institution.update({"$set": institution_data})
     updated_institution = await Institution.find_one(
-        Institution.InstitutionName == name
+        Institution.InstitutionName == institution_name
     )
     return updated_institution
 
 
-@router.delete("/{name}")
-async def institution_delete(name):
-    institution = await Institution.find_one(Institution.InstitutionName == name)
-    if not institution:
-        raise HTTPException(404, "No institution found with this name")
+@router.delete("/{institution_name}")
+async def institution_delete(institution_name,
+                             institution: Institution = Depends(current_institution)
+                             ):
     await institution.delete()
     return {
         "message": f"Institution with name {institution.InstitutionName} has been deleted "
