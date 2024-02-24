@@ -1,6 +1,6 @@
 """Food router."""
 
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends
 from db.models import Institution, User
 from schemas.user.users import UserAuth
 from fastapi import APIRouter, HTTPException, status
@@ -11,8 +11,7 @@ from schemas.institutuions.food import FoodeCreate, FoodOut, FoodUpdate
 from db.models import Food, Institution
 from utils.pydantic_encoder import encode_input
 import aiofiles
-from utils.pydantic_encoder import encode_input
-
+from api.depends.institution.current_institution import current_institution
 
 router = APIRouter(prefix="/food", tags=["Food"])
 
@@ -21,12 +20,8 @@ router = APIRouter(prefix="/food", tags=["Food"])
 async def create_food(
     institution_name: str,
     food_data: FoodeCreate,
+    institution: Institution = Depends(current_institution)
 ):
-    institution = await Institution.find_one(
-        Institution.InstitutionName == institution_name
-    )
-    if not institution:
-        return HTTPException("404", detail="institution does not exist")
     food = Food(
         name=food_data.name,
         description=food_data.description,
@@ -40,12 +35,10 @@ async def create_food(
 
 
 @router.get("/{institution_name}", response_model=List[FoodOut])
-async def get_food_by_institution(institution_name: str):
-    institution = await Institution.find_one(
-        Institution.InstitutionName == institution_name, fetch_links=True
-    )
-    if not institution:
-        return HTTPException("404", detail="institution does not exist")
+async def get_food_by_institution(institution_name: str,
+                                  institution: Institution = Depends(current_institution)
+                                  
+                                  ):
     food_list = institution.foods
     if not food_list:
         return HTTPException("404", detail="food not added")

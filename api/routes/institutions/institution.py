@@ -78,7 +78,7 @@ async def institution_update(institution_name: str,
 
 
 @router.delete("/{institution_name}")
-async def institution_delete(institution_name,
+async def institution_delete(
                              institution: Institution = Depends(current_institution)
                              ):
     await institution.delete()
