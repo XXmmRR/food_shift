@@ -53,6 +53,7 @@ class Category(Document):
     institution: Link[Institution]
 
 
+
 class Food(Document):
     name: str
     description: str
@@ -60,3 +61,16 @@ class Food(Document):
     price: int
     draft: bool
     institution: Link[Institution]
+
+class OrderItem(Document):
+    food: Link[Food]
+    quantity: int
+    user: Link[User]
+
+
+class Order(Document):
+    order_items: List[Link[OrderItem]]
+    user: Link[User]
+    institution: Link[Institution]
+    price: int
+
