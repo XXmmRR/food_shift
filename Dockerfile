@@ -4,9 +4,7 @@ WORKDIR /
 
 COPY requirements.txt requirements.txt
 
-RUN pip install -r requirements.txt \
-    && rm -rf /root/.cache/pip
-
+RUN pip install -r requirements.txt 
 EXPOSE 27017
 
 COPY . .

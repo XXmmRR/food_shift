@@ -12,7 +12,7 @@ from schemas.institutuions.institutions import (
     InstitutionUpdate,
 )
 from utils.pydantic_encoder import encode_input
-from api.depends.institution import current_institution
+from api.depends.institution.current_institution import current_institution
 import aiofiles
 
 
@@ -44,14 +44,15 @@ async def institution_create(
 
 @router.patch("/{institution_name}/set-image")
 async def set_image_for_institution(
-    name: str, file: UploadFile, institution: Institution = Depends(current_institution)
+    file: UploadFile, 
+    institution: Institution = Depends(current_institution)
 ):
     await institution.update({"$set": {Institution.image: file.filename}})
     async with aiofiles.open(file.filename, "wb") as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
 
-    new_institution = await Institution.find_one(Institution.InstitutionName == name)
+    new_institution = await Institution.find_one(Institution.InstitutionName == institution.InstitutionName)
     return new_institution
 
 
@@ -63,14 +64,13 @@ async def institution_get():
 
 @router.patch("/{institution_name}", response_model=InstitutionOut)
 async def institution_update(
-    institution_name: str,
     institution_update: InstitutionUpdate,
     institution: Institution = Depends(current_institution),
 ):
     institution_data = encode_input(institution_update)
     _ = await institution.update({"$set": institution_data})
     updated_institution = await Institution.find_one(
-        Institution.InstitutionName == institution_name
+        Institution.InstitutionName == institution.InstitutionName
     )
     return updated_institution
 

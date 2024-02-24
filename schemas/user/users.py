@@ -3,6 +3,7 @@
 from typing import Annotated, Optional
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from beanie import Indexed
 
 
 class UserRegister(BaseModel):
