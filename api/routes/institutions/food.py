@@ -1,7 +1,7 @@
 """Food router."""
 
 from fastapi import APIRouter, HTTPException, UploadFile, Depends
-from db.models import Institution
+from db.models import Institution, Category
 from fastapi import APIRouter, HTTPException, status
 from typing import List
 from schemas.institutuions.food import FoodeCreate, FoodOut, FoodUpdate
@@ -9,6 +9,7 @@ from db.models import Food, Institution
 from utils.pydantic_encoder import encode_input
 import aiofiles
 from api.depends.institution.current_institution import current_institution
+
 
 router = APIRouter(prefix="/food", tags=["Food"])
 
@@ -18,6 +19,9 @@ async def create_food(
     food_data: FoodeCreate,
     institution: Institution = Depends(current_institution),
 ):
+    category = await Category.find_one(Category.name==FoodeCreate.category)
+    if not category:
+        return HTTPException(status_code=404, detail='Category not found')
     food = Food(
         name=food_data.name,
         description=food_data.description,
@@ -25,6 +29,7 @@ async def create_food(
         active=food_data.active,
         institution=institution,
         draft=food_data.draft,
+        category=category
     )
     await Food.create(food)
     return food

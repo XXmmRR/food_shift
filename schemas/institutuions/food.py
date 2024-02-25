@@ -4,7 +4,8 @@ from bson import ObjectId
 
 from bson import ObjectId
 from pydantic_core import core_schema
-
+from schemas.institutuions.category import Category
+from typing import List
 
 class PyObjectId(str):
     @classmethod
@@ -42,11 +43,11 @@ class FoodModel(BaseModel):
     description: str
     price: int
     draft: bool
-
+    category: Category
 
 class FoodeCreate(FoodModel):
     active: bool
-
+    
 
 class FoodOut(FoodModel):
     id: PyObjectId
