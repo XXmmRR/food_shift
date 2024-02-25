@@ -50,7 +50,6 @@ class Institution(Document):
 
 class Category(Document):
     name: str
-    institution: Link[Institution]
 
 
 
@@ -61,6 +60,7 @@ class Food(Document):
     price: int
     draft: bool
     institution: Link[Institution]
+    category: Link[Category]
 
 class OrderItem(Document):
     food: Link[Food]

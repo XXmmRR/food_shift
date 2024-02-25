@@ -10,26 +10,24 @@ from api.depends.institution.current_institution import current_institution
 router = APIRouter(prefix="/category", tags=["Category"])
 
 
-@router.post("/{institution_name}", response_model=CategorySchema)
+@router.post("", response_model=CategorySchema)
 async def create_category(
     category_data: CategorySchema,
-    institution: Institution = Depends(current_institution),
 ):
-    category = await Category(name=category_data.name, institution=institution)
+    category = await Category(name=category_data.name,)
     await Category.create(category)
     return category
 
 
-@router.get("/{institution_name}", response_model=List[CategorySchema])
-async def get_categories(institution: Institution = Depends(current_institution)):
-    categories = await Category.find_many(institution=institution)
+@router.get("", response_model=List[CategorySchema])
+async def get_categories():
+    categories = await Category.find_many()
     return categories
 
 
-@router.delete("/{institution_name}/{category_name}")
+@router.delete("/{category_name}")
 async def delete_category(
     category_name: str,
-    institution: Institution = Depends(current_institution),
 ):
-    categories = await Category.find_one(institution=institution, name=category_name)
+    categories = await Category.find_one(name=category_name)
     return categories
