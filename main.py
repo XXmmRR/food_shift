@@ -14,6 +14,7 @@ from api.routes.institutions.category import router as CategoryRouter
 from api.routes.institutions.rating import router as RatingRouter
 from api.routes.chats.chat import router as ChatRouter
 from api.routes.metrics.health_check import router as HealthRouter
+from api.routes.institutions.order import router as OrderRouter
 from prometheus_fastapi_instrumentator import Instrumentator
 
 def get_application() -> FastAPI:
@@ -43,6 +44,7 @@ def get_application() -> FastAPI:
     application.include_router(RatingRouter)
     application.include_router(ChatRouter)
     application.include_router(HealthRouter)
+    application.include_router(OrderRouter)
     Instrumentator().instrument(application).expose(application)
     return application
 
