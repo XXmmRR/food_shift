@@ -43,14 +43,15 @@ class FoodModel(BaseModel):
     description: str
     price: int
     draft: bool
-    category: Category
 
 class FoodeCreate(FoodModel):
     active: bool
+    category: str
     
 
 class FoodOut(FoodModel):
     id: PyObjectId
+    category: Category
     image: Optional[str] = None
 
 
