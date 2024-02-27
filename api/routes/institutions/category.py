@@ -14,7 +14,7 @@ router = APIRouter(prefix="/category", tags=["Category"])
 async def create_category(
     category_data: CategorySchema,
 ):
-    category = await Category(name=category_data.name,)
+    category = Category(name=category_data.name,)
     await Category.create(category)
     return category
 

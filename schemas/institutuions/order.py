@@ -6,7 +6,7 @@ class OrderModelItem(BaseModel):
     food: FoodModel
     quantity: int
 
-class OrderModel:
+class OrderModel(BaseModel):
     orders_items: List[OrderModelItem]
     
     

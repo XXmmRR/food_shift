@@ -3,7 +3,7 @@ from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 from .mongodb import db
 from beanie import init_beanie
-from db.models import Address, Institution, User, Food, Tag, Rating
+from db.models import Address, Institution, User, Food, Tag, Rating, Category, Order, OrderItem
 from core.config import CONFIG
 
 
@@ -17,7 +17,7 @@ async def connect_to_mongo():
     )
     await init_beanie(
         database=db.client.food_shift,
-        document_models=[Address, User, Food, Tag, Rating, Institution],
+        document_models=[Address, User, Food, Tag, Rating, Institution, Category, OrderItem, Order],
     )
 
 
