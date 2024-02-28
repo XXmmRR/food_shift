@@ -16,11 +16,12 @@ from utils.pydantic_encoder import encode_input
 from schemas.institutuions.order import OrderModel
 from api.depends.institution.current_institution import current_institution
 from db.models import User
+from beanie.operators import And
 
 
 router = APIRouter(prefix="/order", tags=["Order"])
 
-@router.post('/{institution_name}')
+@router.post('/{institution_name}', response_model=OrderModel)
 async def create_order(
                        order: OrderModel,
                        institution=Depends(current_institution),
@@ -29,13 +30,14 @@ async def create_order(
                        ):
     orders = []
     price = 0
-    for i in order.orders_items:
-        food = await Food.find_one(Food.name == i.food)
+    for i in order.order_items:
+        food = await Food.find_one(And(Food.name==i.food, Food.institution.id==institution.id,), fetch_links=True)
         price += food.price
         order_obj = OrderItem(food=food, quantity=i.quantity, user=user)
         orders.append(order_obj)
         await order_obj.save()
     order = Order(order_items=orders, user=user, institution=institution, price=price)
-    return order
+    await Order.insert(order)
+    return OrderModel(order_items=[OrderModelItem(food=x.food, quantity=x.quantity) for x in order.order_items])
 
 
