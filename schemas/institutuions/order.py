@@ -3,7 +3,7 @@ from schemas.institutuions.food import FoodModel
 from typing import List
 
 class OrderModelItem(BaseModel):
-    food: FoodModel
+    food: str
     quantity: int
 
 class OrderModel(BaseModel):

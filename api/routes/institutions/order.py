@@ -20,7 +20,7 @@ from db.models import User
 
 router = APIRouter(prefix="/order", tags=["Order"])
 
-@router.post('/{institution_name}', response_model=OrderModel)
+@router.post('/{institution_name}')
 async def create_order(
                        order: OrderModel,
                        institution=Depends(current_institution),
@@ -30,7 +30,7 @@ async def create_order(
     orders = []
     price = 0
     for i in order.orders_items:
-        food = await Food.find_one(Food.name == i.food.name)
+        food = await Food.find_one(Food.name == i.food)
         price += food.price
         order_obj = OrderItem(food=food, quantity=i.quantity, user=user)
         orders.append(order_obj)

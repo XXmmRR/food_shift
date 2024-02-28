@@ -48,7 +48,7 @@ class FoodeCreate(FoodModel):
     active: bool
     category: str
     
-
+    
 class FoodOut(FoodModel):
     id: PyObjectId
     category: Category

@@ -16,9 +16,12 @@ from api.routes.chats.chat import router as ChatRouter
 from api.routes.metrics.health_check import router as HealthRouter
 from api.routes.institutions.order import router as OrderRouter
 from prometheus_fastapi_instrumentator import Instrumentator
+from loguru import logger
+
+
 
 def get_application() -> FastAPI:
-
+    logger.info("App started")
     application = FastAPI()
 
     application.add_middleware(

@@ -19,7 +19,7 @@ async def create_food(
     food_data: FoodeCreate,
     institution: Institution = Depends(current_institution),
 ):
-    category = await Category.find_one(Category.name==FoodeCreate.category)
+    category = await Category.find_one(Category.name==food_data.category)
     if not category:
         return HTTPException(status_code=404, detail='Category not found')
     food = Food(
@@ -39,7 +39,7 @@ async def create_food(
 async def get_food_by_institution(
     institution: Institution = Depends(current_institution)
 ):
-    food_list = institution.foods
+    food_list = await Food.find(Food.institution.id==institution.id, fetch_links=True).to_list()
     if not food_list:
         return HTTPException("404", detail="food not added")
     return food_list
