@@ -25,6 +25,7 @@ class User(Document):
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
     addresses: Optional[List[BackLink[Address]]] = Field(original_field="user")
+    orders: Optional[List[BackLink['Order']]] = Field(original_field='user')
 
 
 class Tag(Document):

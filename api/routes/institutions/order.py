@@ -41,3 +41,11 @@ async def create_order(
     await Order.insert(order)
     return order
 
+
+@router.get('/orders-from-user', response_model=List[OrderModel])
+async def get_order_list_by_user(order: CreateOrderModel,
+                                 institution=Depends(current_institution),
+                                 auth: JwtAuthorizationCredentials = Security(access_security),
+                                user: User = Depends(current_user)):
+    
+    
