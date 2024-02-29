@@ -36,7 +36,7 @@ async def create_order(
         price += food.price
         order_obj = OrderItem(food=food, quantity=i.quantity, user=user)
         orders.append(order_obj)
-        await order_obj.save()
+    await OrderItem.insert_many(orders)
     order = Order(order_items=orders, user=user, institution=institution, price=price)
     await Order.insert(order)
     return order
