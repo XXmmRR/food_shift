@@ -42,6 +42,17 @@ async def create_order(
     return order
 
 
+@router.get('/{order_id}', response_model=OrderModel)
+async def get_order_by_id(
+                       order_id: str,    
+                       auth: JwtAuthorizationCredentials = Security(access_security),
+                       user: User = Depends(current_user) ):
+    order = await Order.find_one(Order.id==order_id)
+    if not order:
+        return HTTPException(status_code=404, detail='object not found')
+    return order
+
+
 @router.get('/orders-from-user', response_model=List[OrderModel])
 async def get_order_list_by_user(
                                  auth: JwtAuthorizationCredentials = Security(access_security),
