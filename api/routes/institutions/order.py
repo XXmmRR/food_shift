@@ -43,9 +43,10 @@ async def create_order(
 
 
 @router.get('/orders-from-user', response_model=List[OrderModel])
-async def get_order_list_by_user(order: CreateOrderModel,
-                                 institution=Depends(current_institution),
+async def get_order_list_by_user(
                                  auth: JwtAuthorizationCredentials = Security(access_security),
-                                user: User = Depends(current_user)):
-    
-    
+                                 user: User = Depends(current_user)):
+    if user.orders:
+        return user.orders
+    else:
+        return HTTPException(status_code=404, detail="User don't have orders yet")
