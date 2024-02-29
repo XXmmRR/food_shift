@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, Depends
 from db.models import Institution, Category
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from schemas.institutuions.food import FoodeCreate, FoodOut, FoodUpdate
+from schemas.institutuions.food import FoodeCreate, FoodOut, FoodUpdate, FoodList
 from db.models import Food, Institution
 from utils.pydantic_encoder import encode_input
 import aiofiles
@@ -35,14 +35,15 @@ async def create_food(
     return food
 
 
-@router.get("/{institution_name}", response_model=List[FoodOut])
+@router.get("/{institution_name}", response_model=FoodList)
 async def get_food_by_institution(
     institution: Institution = Depends(current_institution)
 ):
     food_list = await Food.find(Food.institution.id==institution.id, fetch_links=True).to_list()
     if not food_list:
         return HTTPException("404", detail="food not added")
-    return food_list
+    
+    return FoodList(institution=institution, food_list=food_list)
 
 
 @router.patch("/update/{food_id}")

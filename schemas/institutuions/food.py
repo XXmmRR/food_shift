@@ -6,6 +6,7 @@ from bson import ObjectId
 from pydantic_core import core_schema
 from schemas.institutuions.category import Category
 from typing import List
+from schemas.institutuions.institutions import InstitutionOut
 
 class PyObjectId(str):
     @classmethod
@@ -43,16 +44,22 @@ class FoodModel(BaseModel):
     description: str
     price: int
     draft: bool
+    category: Category
 
 class FoodeCreate(FoodModel):
     active: bool
-    category: str
     
     
 class FoodOut(FoodModel):
     id: PyObjectId
     category: Category
     image: Optional[str] = None
+
+
+class FoodList(BaseModel):
+    food_list: List[FoodOut]
+    institution: InstitutionOut
+    
 
 
 class FoodUpdate(FoodeCreate):
