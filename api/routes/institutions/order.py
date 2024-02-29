@@ -8,6 +8,7 @@ from pymongo.errors import DuplicateKeyError
 from schemas.institutuions.order import (
     OrderModelItem,
     OrderModel,
+    CreateOrderModel
 )
 from core.jwt import access_security
 from fastapi_jwt import JwtAuthorizationCredentials
@@ -23,7 +24,7 @@ router = APIRouter(prefix="/order", tags=["Order"])
 
 @router.post('/{institution_name}', response_model=OrderModel)
 async def create_order(
-                       order: OrderModel,
+                       order: CreateOrderModel,
                        institution=Depends(current_institution),
                        auth: JwtAuthorizationCredentials = Security(access_security),
                        user: User = Depends(current_user)
@@ -38,6 +39,5 @@ async def create_order(
         await order_obj.save()
     order = Order(order_items=orders, user=user, institution=institution, price=price)
     await Order.insert(order)
-    return OrderModel(order_items=[OrderModelItem(food=x.food, quantity=x.quantity) for x in order.order_items])
-
+    return order
 
