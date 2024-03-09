@@ -18,4 +18,5 @@ class OrderModel(BaseModel):
     id: PyObjectId
     order_items: List[OrderModelItem]
     
-    
+class OrderUpdate(BaseModel):
+    order_items: List[OrderModelItem]

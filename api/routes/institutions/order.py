@@ -14,7 +14,7 @@ from core.jwt import access_security
 from fastapi_jwt import JwtAuthorizationCredentials
 from api.depends.user.current_user import current_user
 from utils.pydantic_encoder import encode_input
-from schemas.institutuions.order import OrderModel
+from schemas.institutuions.order import OrderModel, OrderUpdate
 from api.depends.institution.current_institution import current_institution
 from db.models import User
 from beanie.operators import And
@@ -39,6 +39,24 @@ async def create_order(
     await OrderItem.insert_many(orders)
     order = Order(order_items=orders, user=user, institution=institution, price=price)
     await Order.insert(order)
+    return order
+
+
+@router.patch('/{order_id}', response_model=OrderModel)
+async def update_order_by_id(
+                            order_id: str,
+                            order_update: OrderUpdate
+                            ):
+    order = await Order.find_one(Order.id==order_id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Food with id {food} not found",
+        )
+
+    order_data = encode_input(order_update)
+    _ = await order.update({"$set": order_data})
+    order = await Order.find_one(Order.id==order_id)    
     return order
 
 
