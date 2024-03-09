@@ -1,6 +1,6 @@
 """Order router."""
 
-from fastapi import APIRouter, Depends, Security
+from fastapi import APIRouter, Depends, Security, status
 from fastapi import APIRouter, HTTPException
 from db.models import Order, OrderItem, Food
 from typing import List
@@ -51,7 +51,7 @@ async def update_order_by_id(
     if not order:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Food with id {food} not found",
+            detail=f"Order with id {order_id} not found",
         )
 
     order_data = encode_input(order_update)
