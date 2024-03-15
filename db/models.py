@@ -52,6 +52,9 @@ class Institution(Document):
 class Category(Document):
     name: str
 
+class Ingritient(Document):
+    name: str
+    photo: str
 
 
 class Food(Document):
@@ -60,6 +63,9 @@ class Food(Document):
     image: Optional[str] = None
     price: int
     draft: bool
+    calories: float
+    weight: float
+    ingritients: List[Link[Ingritient]]
     institution: Link[Institution]
     category: Link[Category]
 
