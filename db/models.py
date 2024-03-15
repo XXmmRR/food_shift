@@ -43,6 +43,7 @@ class Institution(Document):
     InstitutionName: Indexed(str, unique=True)
     image: Optional[str] = None
     description: str
+    avg_cooking_time: str
     owner: Link[User]
     tags: Optional[List[Link[Tag]]] = None
     ratings: Optional[List[BackLink[Rating]]] = Field(original_field="institution")
@@ -65,7 +66,8 @@ class Food(Document):
     draft: bool
     calories: float
     weight: float
-    ingritients: List[Link[Ingritient]]
+    avg_cooking_time: float
+    ingritients: Optional[List[Link[Ingritient]]]
     institution: Link[Institution]
     category: Link[Category]
 
