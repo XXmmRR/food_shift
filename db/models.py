@@ -74,7 +74,6 @@ class Food(Document):
     ingritients: Optional[List[Link[Ingritient]]]
     institution: Link[Institution]
     category: Link[Category]
-    ingritients: List[Link[Ingridients]]
     
 
 class OrderItem(Document):
