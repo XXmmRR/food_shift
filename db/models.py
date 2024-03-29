@@ -57,6 +57,10 @@ class Ingritient(Document):
     name: str
     photo: str
 
+class Ingridients(Document):
+    name: str
+    image: str  
+
 
 class Food(Document):
     name: str
@@ -70,6 +74,8 @@ class Food(Document):
     ingritients: Optional[List[Link[Ingritient]]]
     institution: Link[Institution]
     category: Link[Category]
+    ingritients: List[Link[Ingridients]]
+    
 
 class OrderItem(Document):
     food: Link[Food]
