@@ -75,6 +75,19 @@ async def set_image_for_institution(food_id: str, file: UploadFile):
     new_food = await Food.find_one(Food.id == food_id)
     return new_food
 
+@router.patch('/{food_id}/add-ingridient/{ingridient_id}')
+async def add_ingridient(food_id: str, ingridient_id: int):
+    if food:
+        await food.update({"$set": {Food.image: file.filename}})
+    else:
+        return HTTPException(status_code=404, detail="Object not found")
+    async with aiofiles.open(file.filename, "wb") as out_file:
+        content = await file.read()  # async read
+        await out_file.write(content)  # async write
+
+    new_food = await Food.find_one(Food.id == food_id)
+    return new_food
+
 
 @router.delete("/delete/{food_id}")
 async def delete_food(food_id: str):
