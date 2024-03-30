@@ -4,7 +4,14 @@ from datetime import datetime
 from pydantic import EmailStr
 from beanie import Indexed, BackLink
 from pydantic import Field
+from enum import Enum, IntEnum
 
+class UserEnum(str, Enum):
+    client = 'client'
+    owner = 'owner'
+    admin = 'admin'
+    courier = 'courier'
+    
 
 class Address(Document):
     lat: float
@@ -20,7 +27,7 @@ class User(Document):
     phone: str
     email: EmailStr
     password: str
-    user_type: str = "client"
+    user_type: UserEnum = "client"
     disabled: Optional[bool] = None
     email_confirmed_at: Optional[datetime] = None
     favorites: Optional[List[Link["Institution"]]] = None
