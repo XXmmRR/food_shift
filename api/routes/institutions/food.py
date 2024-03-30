@@ -1,7 +1,7 @@
 """Food router."""
 
 from fastapi import APIRouter, HTTPException, UploadFile, Depends
-from db.models import Institution, Category
+from db.models import Institution, Category, Ingridients
 from fastapi import APIRouter, HTTPException, status
 from typing import List
 from schemas.institutuions.food import FoodeCreate, FoodOut, FoodUpdate, FoodList
@@ -77,16 +77,14 @@ async def set_image_for_institution(food_id: str, file: UploadFile):
 
 @router.patch('/{food_id}/add-ingridient/{ingridient_id}')
 async def add_ingridient(food_id: str, ingridient_id: int):
-    if food:
-        await food.update({"$set": {Food.image: file.filename}})
-    else:
-        return HTTPException(status_code=404, detail="Object not found")
-    async with aiofiles.open(file.filename, "wb") as out_file:
-        content = await file.read()  # async read
-        await out_file.write(content)  # async write
-
-    new_food = await Food.find_one(Food.id == food_id)
-    return new_food
+    food = await Food.find_one(Food.id == food_id)
+    ingridient = await Ingridients.find_one(Ingridients.id==ingridient_id)
+    if ingridient:
+        if food:
+            food.ingritients.append(ingridient)
+            await food.update()
+        return {'message': 'food updated'}
+    return HTTPException(status_code=404, detail="Object not found")
 
 
 @router.delete("/delete/{food_id}")
